@@ -1,0 +1,50 @@
+service: simple-sls-nuxt
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: ${opt:stage, "production"}
+  profile: ${self:custom.secrets.profile}
+  region: ap-northeast-1
+  logRetentionInDays: 7
+  apiKeys:
+    - name: simple-sls-nuxt-apiKey
+      value: ${self:custom.secrets.apiKey}
+  environment:
+    NODE_ENV: ${opt:env, "production"}
+
+functions:
+  app:
+    handler: server/lambda.nuxt
+    timeout: 30
+    memorySize: 512
+    environment:
+      NODE_ENV: ${self:provider.stage}
+    events:
+      - http:
+          path: '/'
+          method: any
+          private: true
+      - http:
+          path: '{proxy+}'
+          method: any
+          private: true
+
+package:
+  individually: true
+  excludeDevDependencies: true
+
+plugins:
+  - serverless-apigw-binary
+  - serverless-prune-plugin
+
+custom:
+  secrets: ${file(sls-secrets.js)}
+  apigwBinary:
+    types:
+      - '*/*'
+  prune:
+    automatic: true
+    number: 3
+
+resources:

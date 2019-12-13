@@ -1,0 +1,35 @@
+{
+  "name": "simple-sls-nuxt",
+  "version": "1.0.0",
+  "description": "My first-rate Nuxt.js project",
+  "author": "rcanai",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "deploy": "yarn build && sls deploy",
+    "sls:remove": "sls remove"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/pwa": "^3.0.0-0",
+    "aws-serverless-express": "^3.3.6",
+    "fastify": "^2.11.0",
+    "fastify-static": "^2.5.1",
+    "nuxt": "^2.0.0",
+    "nuxt-start": "^2.10.2"
+  },
+  "devDependencies": {
+    "@nuxtjs/eslint-config": "^1.0.1",
+    "@nuxtjs/eslint-module": "^1.0.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^6.1.0",
+    "eslint-plugin-nuxt": ">=0.4.2",
+    "serverless": "^1.59.3",
+    "serverless-apigw-binary": "^0.4.4",
+    "serverless-prune-plugin": "^1.4.1"
+  }
+}
