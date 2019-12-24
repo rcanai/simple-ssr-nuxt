@@ -1,6 +1,6 @@
 # simple-sls-nuxt
 
-Nuxtjs using a simple constitution serverless framework
+NuxtJS using a simple constitution serverless framework
 
 ## Constitution
 
@@ -38,6 +38,8 @@ $ yarn create nuxt-app simple-sls-nuxt;
 
 ## Deploy
 
+Serverless
+
 ```bash
 $ yarn run deploy;
 ```
@@ -45,13 +47,25 @@ $ yarn run deploy;
 Cloudformation
 
 ```bash
+# First (Create Stack)
 $ aws cloudformation deploy --template-file aws/sls-cfn.yml --stack-name SimpleSlsNuxtCfn --parameter-overrides SlsStage=production SlsRestApiId=XXX ApiKey=XXX --profile XXX;
+
+# Seconds etc (Update Stack)
+$ aws cloudformation deploy --template-file aws/sls-cfn.yml --stack-name SimpleSlsNuxtCfn --profile XXX;
 ```
 
 ## Delete
 
+Serverless
+
 ```bash
 $ yarn run sls:remove;
+```
+
+Cloudformation
+
+```bash
+$ aws cloudformation delete-stack --stack-name SimpleSlsNuxtCfn --profile XXX;
 ```
 
 Other params  

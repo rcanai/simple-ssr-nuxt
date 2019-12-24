@@ -8,10 +8,10 @@ provider:
   region: ap-northeast-1
   logRetentionInDays: 7
   apiKeys:
-    - name: simple-sls-nuxt-apiKey
+    - name: simple-sls-nuxt-apiKey-001 # 以前のKeyと被ると使えないため連番を付与
       value: ${self:custom.SECRETS.API_KEY}
   environment:
-    NODE_ENV: ${opt:env, "production"}
+    NODE_ENV: ${self:provider.stage}
 
 functions:
   app:
@@ -23,11 +23,11 @@ functions:
     events:
       - http:
           path: '/'
-          method: any
+          method: GET
           private: true
       - http:
-          path: '{proxy+}'
-          method: any
+          path: '/{proxy+}'
+          method: GET
           private: true
 
 package:
@@ -41,7 +41,7 @@ plugins:
 
 custom:
   SECRETS: ${file(sls-secrets.js)}
-  S3_BUCKET_NAME: ${self:provider.stage}-simple-sls-nuxt-bucket
+  S3_BUCKET_NAME: ${self:provider.stage}-simple-sls-nuxt-static-bucket
   apigwBinary:
     types:
       - '*/*'
