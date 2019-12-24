@@ -4,12 +4,12 @@ provider:
   name: aws
   runtime: nodejs10.x
   stage: ${opt:stage, "production"}
-  profile: ${self:custom.secrets.profile}
+  profile: ${self:custom.SECRETS.PROFILE}
   region: ap-northeast-1
   logRetentionInDays: 7
   apiKeys:
     - name: simple-sls-nuxt-apiKey
-      value: ${self:custom.secrets.apiKey}
+      value: ${self:custom.SECRETS.API_KEY}
   environment:
     NODE_ENV: ${opt:env, "production"}
 
@@ -37,14 +37,55 @@ package:
 plugins:
   - serverless-apigw-binary
   - serverless-prune-plugin
+  - serverless-s3-sync
 
 custom:
-  secrets: ${file(sls-secrets.js)}
+  SECRETS: ${file(sls-secrets.js)}
+  S3_BUCKET_NAME: ${self:provider.stage}-simple-sls-nuxt-bucket
   apigwBinary:
     types:
       - '*/*'
   prune:
     automatic: true
     number: 3
+  s3Sync:
+    - bucketName: ${self:custom.S3_BUCKET_NAME}
+      acl: public-read
+      bucketPrefix: 'public'
+      localDir: 'client/static/files'
+    # - bucketName: ${self:custom.S3_BUCKET_NAME}
+    #   acl: public-read
+    #   bucketPrefix: '_nuxt/images'
+    #   localDir: '.nuxt/dist/client/images'
 
 resources:
+  Resources:
+    # 静的ファイル用のS3バケット
+    StaticS3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.S3_BUCKET_NAME}
+        AccessControl: Private
+    # 静的ファイル用のS3バケットポリシー
+    StaticS3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket:
+          Ref: StaticS3Bucket
+        PolicyDocument:
+          Statement:
+          - Action: s3:GetObject
+            Effect: Allow
+            Principal:
+              AWS:
+                Fn::Join:
+                - " "
+                - - "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity"
+                  - Ref: SlsCloudFrontOriginAccessIdentity
+            Resource: arn:aws:s3:::${self:custom.S3_BUCKET_NAME}/*
+    SlsCloudFrontOriginAccessIdentity:
+      Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+      Properties:
+        CloudFrontOriginAccessIdentityConfig:
+          Comment:
+            Ref: AWS::StackName

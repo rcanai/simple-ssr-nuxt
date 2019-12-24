@@ -1,6 +1,6 @@
 module.exports = () => {
   return {
-    profile: '',
-    apiKey: ''
+    PROFILE: '',
+    API_KEY: ''
   }
 }
