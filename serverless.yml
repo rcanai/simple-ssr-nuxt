@@ -3,15 +3,17 @@ service: simple-sls-nuxt
 provider:
   name: aws
   runtime: nodejs10.x
-  stage: ${opt:stage, "production"}
-  profile: ${self:custom.SECRETS.PROFILE}
+  stage: ${self:custom.PARAMS.NODE_ENV}
+  profile: ${self:custom.PARAMS.PROFILE}
   region: ap-northeast-1
   logRetentionInDays: 7
+  apiGateway:
+      restApiId: ${self:custom.PARAMS.API_ID}
   apiKeys:
-    - name: simple-sls-nuxt-apiKey-001 # 以前のKeyと被ると使えないため連番を付与
-      value: ${self:custom.SECRETS.API_KEY}
+    - name: simple-sls-nuxt-apiKey
+      value: ${self:custom.PARAMS.API_KEY}
   environment:
-    NODE_ENV: ${self:provider.stage}
+    NODE_ENV: ${self:custom.PARAMS.NODE_ENV}
 
 functions:
   app:
@@ -19,16 +21,18 @@ functions:
     timeout: 30
     memorySize: 512
     environment:
-      NODE_ENV: ${self:provider.stage}
+      NODE_ENV: ${self:custom.PARAMS.NODE_ENV}
     events:
       - http:
           path: '/'
           method: GET
           private: true
+          cors: true
       - http:
           path: '/{proxy+}'
           method: GET
           private: true
+          cors: true
 
 package:
   individually: true
@@ -40,8 +44,7 @@ plugins:
   - serverless-s3-sync
 
 custom:
-  SECRETS: ${file(sls-secrets.js)}
-  S3_BUCKET_NAME: ${self:provider.stage}-simple-sls-nuxt-static-bucket
+  PARAMS: ${file(sls-params.js)}
   apigwBinary:
     types:
       - '*/*'
@@ -49,24 +52,24 @@ custom:
     automatic: true
     number: 3
   s3Sync:
-    - bucketName: ${self:custom.S3_BUCKET_NAME}
+    - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
       acl: public-read
       bucketPrefix: 'public'
       localDir: 'client/static/files'
-    # - bucketName: ${self:custom.S3_BUCKET_NAME}
+    # - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
     #   acl: public-read
     #   bucketPrefix: '_nuxt/images'
     #   localDir: '.nuxt/dist/client/images'
 
 resources:
   Resources:
-    # 静的ファイル用のS3バケット
+    # S3: 静的ファイル用のS3バケット
     StaticS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: ${self:custom.S3_BUCKET_NAME}
+        BucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
         AccessControl: Private
-    # 静的ファイル用のS3バケットポリシー
+    # S3: 静的ファイル用のS3バケットポリシー
     StaticS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
@@ -79,13 +82,53 @@ resources:
             Principal:
               AWS:
                 Fn::Join:
-                - " "
-                - - "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity"
-                  - Ref: SlsCloudFrontOriginAccessIdentity
-            Resource: arn:aws:s3:::${self:custom.S3_BUCKET_NAME}/*
-    SlsCloudFrontOriginAccessIdentity:
+                  - " "
+                  - - "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity"
+                    - Ref: CFOriginAccessIdentity
+            Resource: "arn:aws:s3:::${self:custom.PARAMS.S3_BUCKET_NAME}/*"
+    # Cloud Front: Identity
+    CFOriginAccessIdentity:
       Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
       Properties:
         CloudFrontOriginAccessIdentityConfig:
           Comment:
             Ref: AWS::StackName
+    # Cloud Front: 全体用
+    SimpleSlsNuxtCFDist:
+      Type: AWS::CloudFront::Distribution
+      Properties:
+        DistributionConfig:
+          # Alias(CNAMEs)の設定はSSL証明書の設定が必要
+          # Aliases:
+          #   - "simple-sls-nuxt.rcanai.com"
+          Origins:
+            - Id: SimpleSlsNuxtAPIGW
+              DomainName: "${self:custom.PARAMS.API_ID}.execute-api.ap-northeast-1.amazonaws.com"
+              OriginPath: "/${self:custom.PARAMS.NODE_ENV}"
+              CustomOriginConfig:
+                HTTPPort: 80
+                HTTPSPort: 443
+                OriginProtocolPolicy: "match-viewer"
+              OriginCustomHeaders:
+                - HeaderName: "X-API-KEY"
+                  HeaderValue: "FIXME"
+            # - Id: SimpleSlsNuxtStaticBucket
+            #   DomainName: !Sub "${SlsStage}-simple-sls-nuxt-static-bucket"
+            #   OriginPath: ""
+            #   S3OriginConfig:
+            #     OriginAccessIdentity: ""
+          Enabled: true
+          HttpVersion: "http1.1"
+          Comment:
+            Ref: AWS::StackName
+          DefaultRootObject: ""
+          DefaultCacheBehavior:
+            TargetOriginId: SimpleSlsNuxtAPIGW
+            ForwardedValues:
+              QueryString: false
+            ViewerProtocolPolicy: redirect-to-https
+  Outputs:
+    Dummy001:
+      Value: "Dummy001"
+      Export:
+        Name: Dummy001

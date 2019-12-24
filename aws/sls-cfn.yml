@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
   SlsStage:
     Type: String
-  SlsRestApiId:
+  SlsApiId:
     Type: String
   ApiKey:
     Type: String
@@ -21,7 +21,7 @@ Resources:
         #   - "simple-sls-nuxt.rcanai.com"
         Origins:
           - Id: SimpleSlsNuxtAPIGW
-            DomainName: !Sub "${SlsRestApiId}.execute-api.ap-northeast-1.amazonaws.com"
+            DomainName: !Sub "${SlsApiId}.execute-api.ap-northeast-1.amazonaws.com"
             OriginPath: !Sub "/${SlsStage}"
             CustomOriginConfig:
               HTTPPort: 80
@@ -30,12 +30,15 @@ Resources:
             OriginCustomHeaders:
               - HeaderName: "X-API-KEY"
                 HeaderValue: !Ref ApiKey
-          - Id: SimpleSlsNuxtStaticBucket
-            DomainName: !Sub "${SlsStage}-simple-sls-nuxt-static-bucket"
-            OriginPath: ""
+          # - Id: SimpleSlsNuxtStaticBucket
+          #   DomainName: !Sub "${SlsStage}-simple-sls-nuxt-static-bucket"
+          #   OriginPath: ""
+          #   S3OriginConfig:
+          #     OriginAccessIdentity: ""
         Enabled: true
         HttpVersion: "http1.1"
-        Comment: "simple-sls-nuxt"
+        Comment:
+          Ref: AWS::StackName
         DefaultRootObject: ""
         DefaultCacheBehavior:
           TargetOriginId: SimpleSlsNuxtAPIGW

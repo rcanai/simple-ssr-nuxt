@@ -12,7 +12,7 @@ NuxtJS using a simple constitution serverless framework
 ## Development
 
 ```bash
-$ cp secrets.example.js secrets.js
+$ cp sls-params.example.js sls-params.js
 $ yarn install;
 $ yarn run dev;
 ```
@@ -48,7 +48,7 @@ Cloudformation
 
 ```bash
 # First (Create Stack)
-$ aws cloudformation deploy --template-file aws/sls-cfn.yml --stack-name SimpleSlsNuxtCfn --parameter-overrides SlsStage=production SlsRestApiId=XXX ApiKey=XXX --profile XXX;
+$ aws cloudformation deploy --template-file aws/sls-cfn.yml --stack-name SimpleSlsNuxtCfn --parameter-overrides SlsStage=production SlsApiId=XXX ApiKey=XXX --profile XXX;
 
 # Seconds etc (Update Stack)
 $ aws cloudformation deploy --template-file aws/sls-cfn.yml --stack-name SimpleSlsNuxtCfn --profile XXX;
@@ -67,8 +67,3 @@ Cloudformation
 ```bash
 $ aws cloudformation delete-stack --stack-name SimpleSlsNuxtCfn --profile XXX;
 ```
-
-Other params  
-- enviroment -> --env   (default "production")
-- stage      -> --stage (default "production")
-

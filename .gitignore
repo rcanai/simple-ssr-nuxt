@@ -89,5 +89,5 @@ sw.*
 # Vim swap files
 *.swp
 
-# Secret file
-sls-secrets.js
+# Serverless Parameters
+sls-params.js
