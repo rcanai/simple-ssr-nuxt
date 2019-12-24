@@ -65,6 +65,9 @@ module.exports = {
     ** You can extend webpack config here
     */
     extend (config, ctx) {
-    }
+    },
+    // ビルドキャッシュ（動かないかも？公式見て！）
+    hardSource: process.env.NODE_ENV === 'development',
+    cache: process.env.NODE_ENV === 'development'
   }
 }

@@ -10,7 +10,7 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "deploy": "yarn build && sls deploy",
+    "deploy": "yarn run build && sls deploy",
     "sls:remove": "sls remove"
   },
   "dependencies": {
@@ -23,7 +23,7 @@
     "nuxt-start": "^2.10.2"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config": "^1.0.1",
+    "@nuxtjs/eslint-config": "^2.0.0",
     "@nuxtjs/eslint-module": "^1.0.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^6.1.0",
