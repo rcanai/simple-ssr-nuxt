@@ -36,14 +36,6 @@ $ yarn create nuxt-app simple-sls-nuxt;
 ? Choose development tools jsconfig.json (Recommended for VS Code)
 ```
 
-## Initialize (Firtst Developper Only)
-
-```bash
-$ yarn run domain:create;
-```
-
-Max time is 40 min ...
-
 ## Deploy
 
 ```bash
