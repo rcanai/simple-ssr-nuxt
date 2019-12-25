@@ -28,11 +28,15 @@ Resources:
             OriginCustomHeaders:
               - HeaderName: "X-API-KEY"
                 HeaderValue: !ImportValue SimpleSlsNuxtApiKey
-          # - Id: SimpleSlsNuxtStaticBucket
-          #   DomainName: !Sub "${SlsStage}-simple-sls-nuxt-static-bucket"
-          #   OriginPath: ""
-          #   S3OriginConfig:
-          #     OriginAccessIdentity: ""
+          - Id: SimpleSlsNuxtStaticBucket
+            DomainName: !ImportValue SimpleSlsNuxtStaticS3BucketDomainName
+            OriginPath: ""
+            S3OriginConfig:
+              OriginAccessIdentity:
+                Fn::Join:
+                  - ""
+                  - - "origin-access-identity/cloudfront/"
+                    - Fn::ImportValue: SimpleSlsNuxtCFOriginAccessIdentity
         Enabled: true
         HttpVersion: "http1.1"
         Comment:

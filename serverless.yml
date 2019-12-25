@@ -101,8 +101,8 @@ resources:
         Ref: SimpleSlsNuxtCFOriginAccessIdentity
       Export:
         Name: SimpleSlsNuxtCFOriginAccessIdentity
-    SimpleSlsNuxtStaticS3BucketArn:
+    SimpleSlsNuxtStaticS3BucketDomainName:
       Value:
-        Fn::GetAtt: SimpleSlsNuxtStaticS3Bucket.Arn
+        Fn::GetAtt: SimpleSlsNuxtStaticS3Bucket.DomainName
       Export:
-        Name: SimpleSlsNuxtStaticS3BucketArn
+        Name: SimpleSlsNuxtStaticS3BucketDomainName
