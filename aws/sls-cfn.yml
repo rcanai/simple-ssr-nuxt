@@ -5,8 +5,6 @@ Parameters:
     Type: String
   SlsApiId:
     Type: String
-  ApiKey:
-    Type: String
 
 Resources:
   # ------
@@ -29,7 +27,7 @@ Resources:
               OriginProtocolPolicy: "match-viewer"
             OriginCustomHeaders:
               - HeaderName: "X-API-KEY"
-                HeaderValue: !Ref ApiKey
+                HeaderValue: !ImportValue SimpleSlsNuxtApiKey
           # - Id: SimpleSlsNuxtStaticBucket
           #   DomainName: !Sub "${SlsStage}-simple-sls-nuxt-static-bucket"
           #   OriginPath: ""

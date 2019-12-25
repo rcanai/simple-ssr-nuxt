@@ -7,8 +7,6 @@ provider:
   profile: ${self:custom.PARAMS.PROFILE}
   region: ap-northeast-1
   logRetentionInDays: 7
-  apiGateway:
-      restApiId: ${self:custom.PARAMS.API_ID}
   apiKeys:
     - name: simple-sls-nuxt-apiKey
       value: ${self:custom.PARAMS.API_KEY}
@@ -64,17 +62,17 @@ custom:
 resources:
   Resources:
     # S3: 静的ファイル用のS3バケット
-    StaticS3Bucket:
+    SimpleSlsNuxtStaticS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
         AccessControl: Private
     # S3: 静的ファイル用のS3バケットポリシー
-    StaticS3BucketPolicy:
+    SimpleSlsNuxtStaticS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
         Bucket:
-          Ref: StaticS3Bucket
+          Ref: SimpleSlsNuxtStaticS3Bucket
         PolicyDocument:
           Statement:
           - Action: s3:GetObject
@@ -84,51 +82,27 @@ resources:
                 Fn::Join:
                   - " "
                   - - "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity"
-                    - Ref: CFOriginAccessIdentity
+                    - Ref: SimpleSlsNuxtCFOriginAccessIdentity
             Resource: "arn:aws:s3:::${self:custom.PARAMS.S3_BUCKET_NAME}/*"
     # Cloud Front: Identity
-    CFOriginAccessIdentity:
+    SimpleSlsNuxtCFOriginAccessIdentity:
       Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
       Properties:
         CloudFrontOriginAccessIdentityConfig:
           Comment:
             Ref: AWS::StackName
-    # Cloud Front: 全体用
-    SimpleSlsNuxtCFDist:
-      Type: AWS::CloudFront::Distribution
-      Properties:
-        DistributionConfig:
-          # Alias(CNAMEs)の設定はSSL証明書の設定が必要
-          # Aliases:
-          #   - "simple-sls-nuxt.rcanai.com"
-          Origins:
-            - Id: SimpleSlsNuxtAPIGW
-              DomainName: "${self:custom.PARAMS.API_ID}.execute-api.ap-northeast-1.amazonaws.com"
-              OriginPath: "/${self:custom.PARAMS.NODE_ENV}"
-              CustomOriginConfig:
-                HTTPPort: 80
-                HTTPSPort: 443
-                OriginProtocolPolicy: "match-viewer"
-              OriginCustomHeaders:
-                - HeaderName: "X-API-KEY"
-                  HeaderValue: "FIXME"
-            # - Id: SimpleSlsNuxtStaticBucket
-            #   DomainName: !Sub "${SlsStage}-simple-sls-nuxt-static-bucket"
-            #   OriginPath: ""
-            #   S3OriginConfig:
-            #     OriginAccessIdentity: ""
-          Enabled: true
-          HttpVersion: "http1.1"
-          Comment:
-            Ref: AWS::StackName
-          DefaultRootObject: ""
-          DefaultCacheBehavior:
-            TargetOriginId: SimpleSlsNuxtAPIGW
-            ForwardedValues:
-              QueryString: false
-            ViewerProtocolPolicy: redirect-to-https
   Outputs:
-    Dummy001:
-      Value: "Dummy001"
+    SimpleSlsNuxtApiKey:
+      Value: ${self:custom.PARAMS.API_KEY}
       Export:
-        Name: Dummy001
+        Name: SimpleSlsNuxtApiKey
+    SimpleSlsNuxtCFOriginAccessIdentity:
+      Value:
+        Ref: SimpleSlsNuxtCFOriginAccessIdentity
+      Export:
+        Name: SimpleSlsNuxtCFOriginAccessIdentity
+    SimpleSlsNuxtStaticS3BucketArn:
+      Value:
+        Fn::GetAtt: SimpleSlsNuxtStaticS3Bucket.Arn
+      Export:
+        Name: SimpleSlsNuxtStaticS3BucketArn
