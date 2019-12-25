@@ -67,6 +67,12 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    // ファイルネームを変えて、S3に移動させたファイルを見れるようにする
+    filenames: {
+      img: ({ isDev }) => (isDev ? '[path][name].[ext]' : 'images/[name].[hash:7].[ext]'),
+      font: ({ isDev }) => (isDev ? '[path][name].[ext]' : 'fonts/[name].[hash:7].[ext]'),
+      video: ({ isDev }) => (isDev ? '[path][name].[ext]' : 'videos/[name].[hash:7].[ext]')
+    },
     /*
     ** You can extend webpack config here
     */

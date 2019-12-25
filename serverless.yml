@@ -36,6 +36,7 @@ package:
   individually: true
   excludeDevDependencies: true
   exclude:
+    # 不要ファイル
     - .**
     - aws/**
     - client/**
@@ -44,6 +45,16 @@ package:
     - yarn.lock
     - jsconfig.json
     - sls-params.example.js
+    # 不要モジュール（devDependencies）
+    - node_modules/@nuxtjs/eslint-config
+    - node_modules/@nuxtjs/eslint-module
+    - node_modules/babel-eslint
+    - node_modules/eslint
+    - node_modules/eslint-plugin-nuxt
+    - node_modules/serverless
+    - node_modules/serverless-apigw-binary
+    - node_modules/serverless-prune-plugin
+    - node_modules/serverless-s3-sync
 
 plugins:
   - serverless-apigw-binary
@@ -61,8 +72,8 @@ custom:
   s3Sync:
     - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
       acl: public-read
-      bucketPrefix: ''
-      localDir: 'client/static'
+      bucketPrefix: 'static'
+      localDir: 'client/static/static'
     # - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
     #   acl: public-read
     #   bucketPrefix: '_nuxt/images'
@@ -71,7 +82,7 @@ custom:
 resources:
   Resources:
     # S3: 静的ファイル用のS3バケット
-    SimpleSlsNuxtPublicS3Bucket:
+    SimpleSlsNuxtStaticS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
@@ -81,7 +92,7 @@ resources:
       Type: AWS::S3::BucketPolicy
       Properties:
         Bucket:
-          Ref: SimpleSlsNuxtPublicS3Bucket
+          Ref: SimpleSlsNuxtStaticS3Bucket
         PolicyDocument:
           Statement:
           - Action: s3:GetObject
@@ -93,7 +104,7 @@ resources:
                   - - "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity"
                     - Ref: SimpleSlsNuxtCFOriginAccessIdentity
             Resource: "arn:aws:s3:::${self:custom.PARAMS.S3_BUCKET_NAME}/*"
-    # Cloud Front: Identity
+    # Cloud Front: 静的ファイル用のIdentity
     SimpleSlsNuxtCFOriginAccessIdentity:
       Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
       Properties:
@@ -110,8 +121,8 @@ resources:
         Ref: SimpleSlsNuxtCFOriginAccessIdentity
       Export:
         Name: SimpleSlsNuxtCFOriginAccessIdentity
-    SimpleSlsNuxtPublicS3BucketDomainName:
+    SimpleSlsNuxtStaticS3BucketDomainName:
       Value:
-        Fn::GetAtt: SimpleSlsNuxtPublicS3Bucket.DomainName
+        Fn::GetAtt: SimpleSlsNuxtStaticS3Bucket.DomainName
       Export:
-        Name: SimpleSlsNuxtPublicS3BucketDomainName
+        Name: SimpleSlsNuxtStaticS3BucketDomainName
