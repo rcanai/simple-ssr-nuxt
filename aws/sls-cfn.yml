@@ -55,7 +55,7 @@ Resources:
           MaxTTL: 0
         CacheBehaviors:
           - TargetOriginId: SimpleSlsNuxtPublicBucket
-            PathPattern: "/public/*"
+            PathPattern: "/*.*"
             ViewerProtocolPolicy: redirect-to-https
             ForwardedValues:
               QueryString: false

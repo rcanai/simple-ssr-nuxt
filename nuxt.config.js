@@ -22,7 +22,7 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'simple-sls-nuxt' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/public/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
   /*

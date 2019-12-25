@@ -61,8 +61,8 @@ custom:
   s3Sync:
     - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
       acl: public-read
-      bucketPrefix: 'public'
-      localDir: 'client/static/public'
+      bucketPrefix: ''
+      localDir: 'client/static'
     # - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
     #   acl: public-read
     #   bucketPrefix: '_nuxt/images'
