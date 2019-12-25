@@ -22,7 +22,7 @@ module.exports = {
       { hid: 'description', name: 'description', content: 'simple-sls-nuxt' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/static/favicon.ico' }
     ]
   },
   /*
@@ -51,9 +51,13 @@ module.exports = {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
+    ['@nuxtjs/axios'],
     // Doc: https://pwa.nuxtjs.org/
-    '@nuxtjs/pwa'
+    ['@nuxtjs/pwa', {
+      workbox: {
+        swScope: '/'
+      }
+    }]
   ],
   /*
   ** Axios module configuration

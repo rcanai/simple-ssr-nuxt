@@ -28,8 +28,8 @@ Resources:
             OriginCustomHeaders:
               - HeaderName: "X-API-KEY"
                 HeaderValue: !ImportValue SimpleSlsNuxtApiKey
-          - Id: SimpleSlsNuxtStaticBucket
-            DomainName: !ImportValue SimpleSlsNuxtStaticS3BucketDomainName
+          - Id: SimpleSlsNuxtPublicBucket
+            DomainName: !ImportValue SimpleSlsNuxtPublicS3BucketDomainName
             OriginPath: ""
             S3OriginConfig:
               OriginAccessIdentity:
@@ -44,18 +44,23 @@ Resources:
         DefaultRootObject: ""
         DefaultCacheBehavior:
           TargetOriginId: SimpleSlsNuxtAPIGW
+          ViewerProtocolPolicy: redirect-to-https
           ForwardedValues:
             QueryString: false
-          ViewerProtocolPolicy: redirect-to-https
+            Cookies:
+              Forward: all
           Compress: true
+          DefaultTTL: 0
+          MinTTL: 0
+          MaxTTL: 0
         CacheBehaviors:
-          - TargetOriginId: SimpleSlsNuxtStaticBucket
-            PathPattern: "/static/*"
+          - TargetOriginId: SimpleSlsNuxtPublicBucket
+            PathPattern: "/public/*"
             ViewerProtocolPolicy: redirect-to-https
             ForwardedValues:
               QueryString: false
             Compress: true
-          - TargetOriginId: SimpleSlsNuxtStaticBucket
+          - TargetOriginId: SimpleSlsNuxtPublicBucket
             PathPattern: "/_nuxt/images/*"
             ViewerProtocolPolicy: redirect-to-https
             ForwardedValues:

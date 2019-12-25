@@ -61,8 +61,8 @@ custom:
   s3Sync:
     - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
       acl: public-read
-      bucketPrefix: 'static'
-      localDir: 'client/static/files'
+      bucketPrefix: 'public'
+      localDir: 'client/static/public'
     # - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
     #   acl: public-read
     #   bucketPrefix: '_nuxt/images'
@@ -71,17 +71,17 @@ custom:
 resources:
   Resources:
     # S3: 静的ファイル用のS3バケット
-    SimpleSlsNuxtStaticS3Bucket:
+    SimpleSlsNuxtPublicS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
         AccessControl: Private
     # S3: 静的ファイル用のS3バケットポリシー
-    SimpleSlsNuxtStaticS3BucketPolicy:
+    SimpleSlsNuxtPublicS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
         Bucket:
-          Ref: SimpleSlsNuxtStaticS3Bucket
+          Ref: SimpleSlsNuxtPublicS3Bucket
         PolicyDocument:
           Statement:
           - Action: s3:GetObject
@@ -110,8 +110,8 @@ resources:
         Ref: SimpleSlsNuxtCFOriginAccessIdentity
       Export:
         Name: SimpleSlsNuxtCFOriginAccessIdentity
-    SimpleSlsNuxtStaticS3BucketDomainName:
+    SimpleSlsNuxtPublicS3BucketDomainName:
       Value:
-        Fn::GetAtt: SimpleSlsNuxtStaticS3Bucket.DomainName
+        Fn::GetAtt: SimpleSlsNuxtPublicS3Bucket.DomainName
       Export:
-        Name: SimpleSlsNuxtStaticS3BucketDomainName
+        Name: SimpleSlsNuxtPublicS3BucketDomainName
