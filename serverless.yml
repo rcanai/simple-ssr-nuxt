@@ -35,6 +35,15 @@ functions:
 package:
   individually: true
   excludeDevDependencies: true
+  exclude:
+    - .**
+    - aws/**
+    - client/**
+    - README.md
+    - package.json
+    - yarn.lock
+    - jsconfig.json
+    - sls-params.example.js
 
 plugins:
   - serverless-apigw-binary
@@ -52,7 +61,7 @@ custom:
   s3Sync:
     - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
       acl: public-read
-      bucketPrefix: 'public'
+      bucketPrefix: 'static'
       localDir: 'client/static/files'
     # - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
     #   acl: public-read

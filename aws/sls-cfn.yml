@@ -47,3 +47,17 @@ Resources:
           ForwardedValues:
             QueryString: false
           ViewerProtocolPolicy: redirect-to-https
+          Compress: true
+        CacheBehaviors:
+          - TargetOriginId: SimpleSlsNuxtStaticBucket
+            PathPattern: "/static/*"
+            ViewerProtocolPolicy: redirect-to-https
+            ForwardedValues:
+              QueryString: false
+            Compress: true
+          - TargetOriginId: SimpleSlsNuxtStaticBucket
+            PathPattern: "/_nuxt/images/*"
+            ViewerProtocolPolicy: redirect-to-https
+            ForwardedValues:
+              QueryString: false
+            Compress: true
