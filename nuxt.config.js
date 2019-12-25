@@ -54,9 +54,7 @@ module.exports = {
     ['@nuxtjs/axios'],
     // Doc: https://pwa.nuxtjs.org/
     ['@nuxtjs/pwa', {
-      workbox: {
-        swScope: '/'
-      }
+      // OWA options here...
     }]
   ],
   /*
