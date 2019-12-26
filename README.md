@@ -48,7 +48,7 @@ Cloudformation
 
 ```bash
 # First (Create Stack)
-$ aws cloudformation deploy --template-file aws/sls-cfn.yml --stack-name SimpleSlsNuxtCfn --parameter-overrides SlsStage=production SlsApiId=XXX --profile XXX;
+$ aws cloudformation deploy --template-file aws/sls-cfn.yml --stack-name SimpleSlsNuxtCfn --parameter-overrides SlsStage=production SlsApiId=XXX SSLArn=XXX --profile XXX;
 
 # Second etc (Update Stack)
 $ aws cloudformation deploy --template-file aws/sls-cfn.yml --stack-name SimpleSlsNuxtCfn --profile XXX;
@@ -56,6 +56,8 @@ $ aws cloudformation deploy --template-file aws/sls-cfn.yml --stack-name SimpleS
 
 > Built API Gateway URL 
 > `https://{SlsApiId}.execute-api.ap-northeast-1.amazonaws.com/{SlsStage}/`
+
+**The first deployment takes about 40 minutes :(**
 
 ## Delete
 
