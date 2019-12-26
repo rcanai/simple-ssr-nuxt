@@ -45,16 +45,17 @@ package:
     - yarn.lock
     - jsconfig.json
     - sls-params.example.js
-    # 不要モジュール（devDependencies）
-    - node_modules/@nuxtjs/eslint-config
-    - node_modules/@nuxtjs/eslint-module
-    - node_modules/babel-eslint
-    - node_modules/eslint
-    - node_modules/eslint-plugin-nuxt
-    - node_modules/serverless
-    - node_modules/serverless-apigw-binary
-    - node_modules/serverless-prune-plugin
-    - node_modules/serverless-s3-sync
+    - sls-params.js
+    # 不要モジュール（devDependenciesの分）
+    - node_modules/@nuxtjs/eslint-config/**
+    - node_modules/@nuxtjs/eslint-module/**
+    - node_modules/babel-eslint/**
+    - node_modules/eslint/**
+    - node_modules/eslint-plugin-nuxt/**
+    - node_modules/serverless/**
+    - node_modules/serverless-apigw-binary/**
+    - node_modules/serverless-prune-plugin/**
+    - node_modules/serverless-s3-sync/**
 
 plugins:
   - serverless-apigw-binary
@@ -72,8 +73,8 @@ custom:
   s3Sync:
     - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
       acl: public-read
-      bucketPrefix: 'static'
-      localDir: 'client/static/static'
+      bucketPrefix: ''
+      localDir: 'client/static'
     # - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
     #   acl: public-read
     #   bucketPrefix: '_nuxt/images'

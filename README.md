@@ -54,6 +54,9 @@ $ aws cloudformation deploy --template-file aws/sls-cfn.yml --stack-name SimpleS
 $ aws cloudformation deploy --template-file aws/sls-cfn.yml --stack-name SimpleSlsNuxtCfn --profile XXX;
 ```
 
+> Built API Gateway URL 
+> `https://{SlsApiId}.execute-api.ap-northeast-1.amazonaws.com/{SlsStage}/`
+
 ## Delete
 
 Serverless

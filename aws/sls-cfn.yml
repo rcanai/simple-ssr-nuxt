@@ -54,7 +54,25 @@ Resources:
           MinTTL: 0
           MaxTTL: 0
         CacheBehaviors:
-          - TargetOriginId: SimpleSlsNuxtStaticBucket
+          - TargetOriginId: SimpleSlsNuxtStaticS3Bucket
+            PathPattern: "/favicon.ico"
+            ViewerProtocolPolicy: redirect-to-https
+            ForwardedValues:
+              QueryString: false
+            Compress: true
+          - TargetOriginId: SimpleSlsNuxtStaticS3Bucket
+            PathPattern: "/sw.js"
+            ViewerProtocolPolicy: redirect-to-https
+            ForwardedValues:
+              QueryString: false
+            Compress: true
+          - TargetOriginId: SimpleSlsNuxtStaticS3Bucket
+            PathPattern: "/*.png"
+            ViewerProtocolPolicy: redirect-to-https
+            ForwardedValues:
+              QueryString: false
+            Compress: true
+          - TargetOriginId: SimpleSlsNuxtStaticS3Bucket
             PathPattern: "/_nuxt/images/*"
             ViewerProtocolPolicy: redirect-to-https
             ForwardedValues:
