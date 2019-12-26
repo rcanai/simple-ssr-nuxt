@@ -78,3 +78,8 @@ Resources:
             ForwardedValues:
               QueryString: false
             Compress: true
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ErrorCachingMinTTL: 0
+            ResponseCode: 404
+            ResponsePagePath: "/404"

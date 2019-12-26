@@ -54,7 +54,15 @@ module.exports = {
     ['@nuxtjs/axios'],
     // Doc: https://pwa.nuxtjs.org/
     ['@nuxtjs/pwa', {
-      // OWA options here...
+      manifest: {
+        icons: [
+          {
+            src: '/icon.png',
+            sizes: '72x72 96x96 128x128 192x192 256x256 512x512'
+          }
+        ]
+      },
+      icon: false // 無駄にコンパイルされるので無効化する
     }]
   ],
   /*
