@@ -4,6 +4,26 @@ NuxtJS using a simple constitution serverless framework
 
 ## Constitution
 
+### nodebrew
+
+```bash
+$ brew install nodebrew;
+$ mkdir -p ~/.nodebrew/src;
+$ nodebrew install-binary v10.16.3;
+$ nodebrew use v10.16.3;
+$ echo 'export PATH=$HOME/.nodebrew/current/bin:$PATH' >> ~/.bash_profile;
+$ source ~/.bash_profile;
+$ brew install yarn --ignore-dependencies;
+```
+
+
+### node-gyp Bug :)
+
+```bash
+$ sudo rm -rf /Library/Developer/CommandLineTools;
+$ xcode-select --install;
+```
+
 ### Server Nodejs Module
 
 ✗ Express + aws-serverless-express 
