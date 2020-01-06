@@ -151,6 +151,24 @@ Resources:
                 - Name: App
               RunOrder: 1
 
+  # ------
+  # CodePipeline Webhook
+  # ------
+  PipelineWebhook:
+    Type: AWS::CodePipeline::Webhook
+    Properties:
+      Authentication: GITHUB_HMAC
+      AuthenticationConfiguration:
+        SecretToken: !Ref GitHubToken
+      Filters:
+        - JsonPath: "$.ref"
+          MatchEquals: 'refs/heads/{Branch}'
+      TargetPipeline: !Ref SimpleSlsNuxtCodePipeline
+      TargetAction: App
+      Name: !Sub "${AWS::StackName}-codepipeline-webhook"
+      TargetPipelineVersion: !GetAtt SimpleSlsNuxtCodePipeline.Version
+      RegisterWithThirdParty: true
+
 Outputs:
   SimpleSlsNuxtApiKey:
     Value: !Ref ApiKey

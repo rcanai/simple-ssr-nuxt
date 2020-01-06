@@ -99,5 +99,6 @@ $ yarn run sls:remove;
 
 ```bash
 $ aws cloudformation delete-stack --stack-name SimpleSlsNuxtFrontCfn --profile XXX;
+$ aws s3 rm s3://simple-sls-nuxt-deploy --recursive --profile XXX;
 $ aws cloudformation delete-stack --stack-name SimpleSlsNuxtDeployCfn --profile XXX;
 ```

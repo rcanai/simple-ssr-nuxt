@@ -34,6 +34,9 @@ module.exports = {
   */
   css: [
   ],
+  styleResources: {
+    scss: []
+  },
   /*
   ** Plugins to load before mounting the App
   */
@@ -63,7 +66,9 @@ module.exports = {
         ]
       },
       icon: false // 無駄にコンパイルされるので無効化する
-    }]
+    }],
+    // Doc: https://github.com/nuxt-community/style-resources-module
+    ['@nuxtjs/style-resources']
   ],
   /*
   ** Axios module configuration
