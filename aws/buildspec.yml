@@ -13,7 +13,5 @@ phases:
   build:
     commands:
       - export SLS_DEBUG=*
-      - yarn build
-  post_build:
-    commands:
-      - yarn sls:deploy
+      - yarn run build
+      - yarn run sls:deploy

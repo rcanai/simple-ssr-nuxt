@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs10.x
   stage: ${self:custom.PARAMS.NODE_ENV}
-  profile: ${self:custom.PARAMS.AWS_PROFILE}
+  profile: "" # AWS_PROFILE
   region: ap-northeast-1
   logRetentionInDays: 7
   apiKeys:
@@ -118,10 +118,6 @@ resources:
           Comment:
             Ref: AWS::StackName
   Outputs:
-    SimpleSlsNuxtApiKey:
-      Value: ${self:custom.PARAMS.API_KEY}
-      Export:
-        Name: SimpleSlsNuxtApiKey
     SimpleSlsNuxtCFOriginAccessIdentity:
       Value:
         Ref: SimpleSlsNuxtCFOriginAccessIdentity

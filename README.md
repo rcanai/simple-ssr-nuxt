@@ -68,7 +68,7 @@ Run on CodePipeline.
 
 ```bash
 # First (Create Stack)
-$ aws cloudformation deploy --template-file aws/deploy-cfn.yml --stack-name SimpleSlsNuxtDeployCfn --parameter-overrides GithubUser=XXX GithubToken=XXX --profile XXX;
+$ aws cloudformation deploy --template-file aws/deploy-cfn.yml --stack-name SimpleSlsNuxtDeployCfn --capabilities CAPABILITY_NAMED_IAM --parameter-overrides ApiKey=XXX GitHubUser=XXX GitHubToken=XXX --profile XXX;
 
 # Second etc (Update Stack)
 $ aws cloudformation deploy --template-file aws/deploy-cfn.yml --stack-name SimpleSlsNuxtDeployCfn --profile XXX;

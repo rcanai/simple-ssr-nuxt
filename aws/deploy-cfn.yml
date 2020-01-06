@@ -1,11 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
 Parameters:
-  GithubUser:
+  GitHubUser:
     Type: String
-  GithubToken:
+  GitHubToken:
     Type: String
-  SlsApiKey:
+  ApiKey:
     Type: String
 
 Resources:
@@ -15,10 +15,10 @@ Resources:
   SimpleSlsNuxtDeployS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "${AWS::StackName}-deploy"
+      BucketName: "simple-sls-nuxt-deploy"
 
   # ------
-  # IAM Role
+  # IAM Role (CodeBuild)
   # ------
   SimpleSlsNuxtCodeBuildServiceRole:
     Type: AWS::IAM::Role
@@ -47,7 +47,9 @@ Resources:
                   - "lambda:*"
                   - "execute-api:Invoke"
                   - "apigateway:*"
-
+  # ------
+  # IAM Role (CodePipeline)
+  # ------
   SimpleSlsNuxtCodePipelineServiceRole:
     Type: AWS::IAM::Role
     Properties:
@@ -65,7 +67,7 @@ Resources:
           PolicyDocument:
             Version: 2012-10-17
             Statement:
-              - Resource: !Sub arn:aws:s3:::${AdminDeployArtifactBucket}/*
+              - Resource: !Sub arn:aws:s3:::${SimpleSlsNuxtDeployS3Bucket}/*
                 Effect: Allow
                 Action:
                   - s3:PutObject
@@ -99,7 +101,7 @@ Resources:
           - Name: NODE_ENV
             Value: "production"
           - Name: API_KEY
-            Value: !Ref SlsApiKey
+            Value: !Ref ApiKey
       Name: !Sub "${AWS::StackName}-codebuild"
       ServiceRole: !Ref SimpleSlsNuxtCodeBuildServiceRole
       QueuedTimeoutInMinutes: 15
@@ -108,7 +110,7 @@ Resources:
   # ------
   # CodePipeline
   # ------
- SimpleSlsNuxtCodePipeline:
+  SimpleSlsNuxtCodePipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
       Name: !Sub "${AWS::StackName}-codepipeline"
@@ -147,3 +149,9 @@ Resources:
               InputArtifacts:
                 - Name: App
               RunOrder: 1
+
+Outputs:
+  SimpleSlsNuxtApiKey:
+    Value: !Ref ApiKey
+    Export:
+      Name: SimpleSlsNuxtApiKey
