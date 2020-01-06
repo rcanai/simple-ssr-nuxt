@@ -1,0 +1,149 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  GithubUser:
+    Type: String
+  GithubToken:
+    Type: String
+  SlsApiKey:
+    Type: String
+
+Resources:
+  # ------
+  # S3 Deploy Bucket
+  # ------
+  SimpleSlsNuxtDeployS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${AWS::StackName}-deploy"
+
+  # ------
+  # IAM Role
+  # ------
+  SimpleSlsNuxtCodeBuildServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-codebuild"
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - "logs:*"
+                  - "cloudformation:*"
+                  - "iam:*"
+                  - "s3:*"
+                  - "lambda:*"
+                  - "execute-api:Invoke"
+                  - "apigateway:*"
+
+  SimpleSlsNuxtCodePipelineServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-codepipeline"
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codepipeline.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource: !Sub arn:aws:s3:::${AdminDeployArtifactBucket}/*
+                Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:GetObjectVersion
+                  - s3:GetBucketVersioning
+              - Resource: '*'
+                Effect: Allow
+                Action:
+                  - codebuild:StartBuild
+                  - codebuild:BatchGetBuilds
+                  - iam:PassRole
+
+  # ------
+  # CodeBuild
+  # ------
+  SimpleSlsNuxtCodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: "aws/buildspec.yml"
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:2.0
+        Type: LINUX_CONTAINER
+        PrivilegedMode: True
+        EnvironmentVariables:
+          - Name: NODE_ENV
+            Value: "production"
+          - Name: API_KEY
+            Value: !Ref SlsApiKey
+      Name: !Sub "${AWS::StackName}-codebuild"
+      ServiceRole: !Ref SimpleSlsNuxtCodeBuildServiceRole
+      QueuedTimeoutInMinutes: 15
+      TimeoutInMinutes: 10
+
+  # ------
+  # CodePipeline
+  # ------
+ SimpleSlsNuxtCodePipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      Name: !Sub "${AWS::StackName}-codepipeline"
+      RoleArn: !GetAtt SimpleSlsNuxtCodePipelineServiceRole.Arn
+      ArtifactStore:
+        Type: S3
+        Location: !Ref SimpleSlsNuxtDeployS3Bucket
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: App
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Version: 1
+                Provider: GitHub
+              Configuration:
+                Owner: !Ref GitHubUser
+                Repo: simple-sls-nuxt
+                Branch: master
+                OAuthToken: !Ref GitHubToken
+                PollForSourceChanges: false
+              OutputArtifacts:
+                - Name: App
+              RunOrder: 1
+        - Name: Build
+          Actions:
+            - Name: Build
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: 1
+                Provider: CodeBuild
+              Configuration:
+                ProjectName: !Ref SimpleSlsNuxtCodeBuildProject
+              InputArtifacts:
+                - Name: App
+              RunOrder: 1

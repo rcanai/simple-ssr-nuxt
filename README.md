@@ -20,6 +20,8 @@ ___
 
 ## Create
 
+[create-nuxt-app](https://github.com/nuxt/create-nuxt-app)
+
 ```bash
 $ yarn create nuxt-app simple-sls-nuxt;
 ✨  Generating Nuxt.js project in simple-sls-nuxt
@@ -38,37 +40,44 @@ $ yarn create nuxt-app simple-sls-nuxt;
 
 ## Deploy
 
-Serverless
+Run on CodePipeline.
 
-```bash
-$ yarn run deploy;
-```
+## Cloudformation
 
-Cloudformation
+### 1. Deploy Environment
 
 ```bash
 # First (Create Stack)
-$ aws cloudformation deploy --template-file aws/sls-cfn.yml --stack-name SimpleSlsNuxtCfn --parameter-overrides SlsStage=production SlsApiId=XXX SSLArn=XXX --profile XXX;
+$ aws cloudformation deploy --template-file aws/deploy-cfn.yml --stack-name SimpleSlsNuxtDeployCfn --parameter-overrides GithubUser=XXX GithubToken=XXX --profile XXX;
 
 # Second etc (Update Stack)
-$ aws cloudformation deploy --template-file aws/sls-cfn.yml --stack-name SimpleSlsNuxtCfn --profile XXX;
+$ aws cloudformation deploy --template-file aws/deploy-cfn.yml --stack-name SimpleSlsNuxtDeployCfn --profile XXX;
 ```
 
-> Built API Gateway URL 
-> `https://{SlsApiId}.execute-api.ap-northeast-1.amazonaws.com/{SlsStage}/`
+### 2. Front End Environment
+
+```bash
+# First (Create Stack)
+$ aws cloudformation deploy --template-file aws/front-cfn.yml --stack-name SimpleSlsNuxtFrontCfn --parameter-overrides SlsApiId=XXX SSLArn=XXX --profile XXX;
+
+# Second etc (Update Stack)
+$ aws cloudformation deploy --template-file aws/front-cfn.yml --stack-name SimpleSlsNuxtFrontCfn --profile XXX;
+```
 
 **The first deployment takes about 40 minutes :(**
 
 ## Delete
 
-Serverless
+### Serverless
 
 ```bash
+$ export AWS_PROFILE=XXX;
 $ yarn run sls:remove;
 ```
 
-Cloudformation
+### Cloudformation
 
 ```bash
-$ aws cloudformation delete-stack --stack-name SimpleSlsNuxtCfn --profile XXX;
+$ aws cloudformation delete-stack --stack-name SimpleSlsNuxtFrontCfn --profile XXX;
+$ aws cloudformation delete-stack --stack-name SimpleSlsNuxtDeployCfn --profile XXX;
 ```

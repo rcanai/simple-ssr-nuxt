@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs10.x
   stage: ${self:custom.PARAMS.NODE_ENV}
-  profile: ${self:custom.PARAMS.PROFILE}
+  profile: ${self:custom.PARAMS.AWS_PROFILE}
   region: ap-northeast-1
   logRetentionInDays: 7
   apiKeys:
@@ -68,7 +68,7 @@ plugins:
   - serverless-s3-sync
 
 custom:
-  PARAMS: ${file(sls-params.js)}
+  PARAMS: ${file(aws/sls-params.js)}
   apigwBinary:
     types:
       - '*/*'

@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+    commands:
+      - node -v
+  pre_build:
+    commands:
+      - yarn -v
+      - yarn install --network-timeout 1000000
+  build:
+    commands:
+      - export SLS_DEBUG=*
+      - yarn build
+  post_build:
+    commands:
+      - yarn sls:deploy

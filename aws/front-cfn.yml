@@ -3,6 +3,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
   SlsStage:
     Type: String
+    Default: production
   SlsApiId:
     Type: String
   SSLArn:
