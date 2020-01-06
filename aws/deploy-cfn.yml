@@ -68,14 +68,14 @@ Resources:
           PolicyDocument:
             Version: 2012-10-17
             Statement:
-              - Resource: !Sub arn:aws:s3:::${SimpleSlsNuxtDeployS3Bucket}/*
+              - Resource: !Sub "arn:aws:s3:::${SimpleSlsNuxtDeployS3Bucket}/*"
                 Effect: Allow
                 Action:
                   - s3:PutObject
                   - s3:GetObject
                   - s3:GetObjectVersion
                   - s3:GetBucketVersioning
-              - Resource: '*'
+              - Resource: "*"
                 Effect: Allow
                 Action:
                   - codebuild:StartBuild
@@ -130,8 +130,8 @@ Resources:
                 Provider: GitHub
               Configuration:
                 Owner: !Ref GitHubUser
-                Repo: simple-sls-nuxt
-                Branch: master
+                Repo: "simple-sls-nuxt"
+                Branch: "master"
                 OAuthToken: !Ref GitHubToken
                 PollForSourceChanges: false
               OutputArtifacts:
