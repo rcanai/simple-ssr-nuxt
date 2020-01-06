@@ -71,7 +71,7 @@ Run on CodePipeline.
 $ aws cloudformation deploy --template-file aws/deploy-cfn.yml --stack-name SimpleSlsNuxtDeployCfn --capabilities CAPABILITY_NAMED_IAM --parameter-overrides ApiKey=XXX GitHubUser=XXX GitHubToken=XXX --profile XXX;
 
 # Second etc (Update Stack)
-$ aws cloudformation deploy --template-file aws/deploy-cfn.yml --stack-name SimpleSlsNuxtDeployCfn --profile XXX;
+$ aws cloudformation deploy --capabilities CAPABILITY_NAMED_IAM --template-file aws/deploy-cfn.yml --stack-name SimpleSlsNuxtDeployCfn --profile XXX;
 ```
 
 ### 2. Front End Environment

@@ -40,13 +40,14 @@ Resources:
               - Resource: "*"
                 Effect: Allow
                 Action:
-                  - "logs:*"
-                  - "cloudformation:*"
-                  - "iam:*"
-                  - "s3:*"
-                  - "lambda:*"
-                  - "execute-api:Invoke"
                   - "apigateway:*"
+                  - "cloudformation:*"
+                  - "cloudfront:*"
+                  - "execute-api:Invoke"
+                  - "iam:*"
+                  - "lambda:*"
+                  - "logs:*"
+                  - "s3:*"
   # ------
   # IAM Role (CodePipeline)
   # ------
