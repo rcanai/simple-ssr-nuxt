@@ -9,8 +9,8 @@ NuxtJS using a simple constitution serverless framework
 ```bash
 $ brew install nodebrew;
 $ mkdir -p ~/.nodebrew/src;
-$ nodebrew install-binary v10.16.3;
-$ nodebrew use v10.16.3;
+$ nodebrew install-binary v12.13.1;
+$ nodebrew use v12.13.1;
 $ echo 'export PATH=$HOME/.nodebrew/current/bin:$PATH' >> ~/.bash_profile;
 $ source ~/.bash_profile;
 $ brew install yarn --ignore-dependencies;

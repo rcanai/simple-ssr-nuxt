@@ -2,7 +2,7 @@ service: simple-sls-nuxt
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs12.x
   stage: ${self:custom.PARAMS.NODE_ENV}
   region: ap-northeast-1
   logRetentionInDays: 7
