@@ -60,8 +60,6 @@ package:
     - node_modules/postcss**/**
     - node_modules/webpack/**
     - node_modules/webpack**/**
-    # 不要な依存モジュールを除外
-    - node_modules/prettier/**
 
 plugins:
   - serverless-apigw-binary
