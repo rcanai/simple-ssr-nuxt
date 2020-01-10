@@ -44,7 +44,7 @@ package:
     - sls-params.example.js
     - sls-params.js
     - yarn.lock
-    # 軽くなるかも
+    # 不要なモジュールを除外
     - node_modules/.cache/**
     - node_modules/@babel/**
     - node_modules/@types/**
@@ -60,6 +60,8 @@ package:
     - node_modules/postcss**/**
     - node_modules/webpack/**
     - node_modules/webpack**/**
+    # 不要な依存モジュールを除外
+    - node_modules/prettier/**
 
 plugins:
   - serverless-apigw-binary
