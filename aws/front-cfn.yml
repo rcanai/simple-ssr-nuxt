@@ -3,11 +3,14 @@ AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
   Env:
     Type: String
-    Default: production
+    Default: "production"
   SlsApiId:
     Type: String
   SSLArn:
     Type: String
+  FrontUrl:
+    Type: String
+    Default: "simple-sls-nuxt.rcanai.com"
 
 Resources:
   # ------
@@ -19,7 +22,7 @@ Resources:
       DistributionConfig:
         # Alias(CNAMEs)の設定はSSL証明書の設定が必要
         Aliases:
-          - "simple-sls-nuxt.rcanai.com"
+          - !Ref FrontUrl
         ViewerCertificate:
           AcmCertificateArn: !Ref SSLArn
           MinimumProtocolVersion: TLSv1_2016 # 現時点でのRecommended
@@ -97,7 +100,7 @@ Resources:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneName: rcanai.com.
-      Name: simple-sls-nuxt.rcanai.com.
+      Name: !Sub "${FrontUrl}."
       Type: A
       AliasTarget:
         HostedZoneId: Z2FDTNDATAQYW2 # CloudFrontなのでIDは固定
