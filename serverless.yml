@@ -14,7 +14,7 @@ provider:
 
 functions:
   app:
-    handler: server/lambda.nuxt
+    handler: server/lambda.handler
     timeout: 30
     memorySize: 512
     environment:
@@ -40,8 +40,6 @@ package:
     - README.md
     - package.json
     - jsconfig.json
-    - sls-params.example.js
-    - sls-params.js
     - yarn.lock
     # 不要なモジュールを除外
     - node_modules/.cache/**
@@ -87,17 +85,17 @@ custom:
 resources:
   Resources:
     # S3: 静的ファイル用のS3バケット
-    SimpleSlsNuxtStaticS3Bucket:
+    StaticS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
         AccessControl: Private
     # S3: 静的ファイル用のS3バケットポリシー
-    SimpleSlsNuxtPublicS3BucketPolicy:
+    StaticS3BucketPolicy:
       Type: AWS::S3::BucketPolicy
       Properties:
         Bucket:
-          Ref: SimpleSlsNuxtStaticS3Bucket
+          Ref: StaticS3Bucket
         PolicyDocument:
           Statement:
           - Action: s3:GetObject
@@ -110,20 +108,20 @@ resources:
                     - Ref: SimpleSlsNuxtCFOriginAccessIdentity
             Resource: "arn:aws:s3:::${self:custom.PARAMS.S3_BUCKET_NAME}/*"
     # Cloud Front: 静的ファイル用のIdentity
-    SimpleSlsNuxtCFOriginAccessIdentity:
+    CFOriginAccessIdentity:
       Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
       Properties:
         CloudFrontOriginAccessIdentityConfig:
           Comment:
             Ref: AWS::StackName
   Outputs:
-    SimpleSlsNuxtCFOriginAccessIdentity:
+    CFOriginAccessIdentity:
       Value:
-        Ref: SimpleSlsNuxtCFOriginAccessIdentity
+        Ref: CFOriginAccessIdentity
       Export:
         Name: SimpleSlsNuxtCFOriginAccessIdentity
-    SimpleSlsNuxtStaticS3BucketDomainName:
+    StaticS3BucketDomainName:
       Value:
-        Fn::GetAtt: SimpleSlsNuxtStaticS3Bucket.DomainName
+        Fn::GetAtt: StaticS3Bucket.DomainName
       Export:
         Name: SimpleSlsNuxtStaticS3BucketDomainName

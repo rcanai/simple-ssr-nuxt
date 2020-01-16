@@ -15,7 +15,7 @@ Resources:
   # ------
   # S3 Deploy Bucket
   # ------
-  SimpleSlsNuxtDeployS3Bucket:
+  DeployS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: "simple-sls-nuxt-deploy"
@@ -23,7 +23,7 @@ Resources:
   # ------
   # IAM Role (CodeBuild)
   # ------
-  SimpleSlsNuxtCodeBuildServiceRole:
+  DeployCodeBuildServiceRole:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub "${AWS::StackName}-codebuild"
@@ -54,7 +54,7 @@ Resources:
   # ------
   # IAM Role (CodePipeline)
   # ------
-  SimpleSlsNuxtCodePipelineServiceRole:
+  DeployCodePipelineServiceRole:
     Type: AWS::IAM::Role
     Properties:
       RoleName: !Sub "${AWS::StackName}-codepipeline"
@@ -71,7 +71,7 @@ Resources:
           PolicyDocument:
             Version: 2012-10-17
             Statement:
-              - Resource: !Sub "arn:aws:s3:::${SimpleSlsNuxtDeployS3Bucket}/*"
+              - Resource: !Sub "arn:aws:s3:::${DeployS3Bucket}/*"
                 Effect: Allow
                 Action:
                   - s3:PutObject
@@ -88,7 +88,7 @@ Resources:
   # ------
   # CodeBuild
   # ------
-  SimpleSlsNuxtCodeBuildProject:
+  DeployCodeBuildProject:
     Type: AWS::CodeBuild::Project
     Properties:
       Artifacts:
@@ -107,21 +107,21 @@ Resources:
           - Name: API_KEY
             Value: !Ref ApiKey
       Name: !Sub "${AWS::StackName}-codebuild"
-      ServiceRole: !Ref SimpleSlsNuxtCodeBuildServiceRole
+      ServiceRole: !Ref DeployCodeBuildServiceRole
       QueuedTimeoutInMinutes: 15
       TimeoutInMinutes: 10
 
   # ------
   # CodePipeline
   # ------
-  SimpleSlsNuxtCodePipeline:
+  DeployCodePipeline:
     Type: AWS::CodePipeline::Pipeline
     Properties:
       Name: !Sub "${AWS::StackName}-codepipeline"
-      RoleArn: !GetAtt SimpleSlsNuxtCodePipelineServiceRole.Arn
+      RoleArn: !GetAtt DeployCodePipelineServiceRole.Arn
       ArtifactStore:
         Type: S3
-        Location: !Ref SimpleSlsNuxtDeployS3Bucket
+        Location: !Ref DeployS3Bucket
       Stages:
         - Name: Source
           Actions:
@@ -149,7 +149,7 @@ Resources:
                 Version: 1
                 Provider: CodeBuild
               Configuration:
-                ProjectName: !Ref SimpleSlsNuxtCodeBuildProject
+                ProjectName: !Ref DeployCodeBuildProject
               InputArtifacts:
                 - Name: App
               RunOrder: 1
@@ -157,7 +157,7 @@ Resources:
   # ------
   # CodePipeline Webhook
   # ------
-  PipelineWebhook:
+  DeployPipelineWebhook:
     Type: AWS::CodePipeline::Webhook
     Properties:
       Authentication: GITHUB_HMAC
@@ -166,10 +166,10 @@ Resources:
       Filters:
         - JsonPath: "$.ref"
           MatchEquals: 'refs/heads/{Branch}'
-      TargetPipeline: !Ref SimpleSlsNuxtCodePipeline
+      TargetPipeline: !Ref DeployCodePipeline
       TargetAction: App
       Name: !Sub "${AWS::StackName}-codepipeline-webhook"
-      TargetPipelineVersion: !GetAtt SimpleSlsNuxtCodePipeline.Version
+      TargetPipelineVersion: !GetAtt DeployCodePipeline.Version
       RegisterWithThirdParty: true
 
 Outputs:
