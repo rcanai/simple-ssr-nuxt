@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
 Parameters:
-  SlsStage:
+  Env:
     Type: String
     Default: production
   SlsApiId:
@@ -27,7 +27,7 @@ Resources:
         Origins:
           - Id: SimpleSlsNuxtAPIGW
             DomainName: !Sub "${SlsApiId}.execute-api.ap-northeast-1.amazonaws.com"
-            OriginPath: !Sub "/${SlsStage}"
+            OriginPath: !Sub "/${Env}"
             CustomOriginConfig:
               HTTPPort: 80
               HTTPSPort: 443

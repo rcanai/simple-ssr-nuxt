@@ -1,6 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
 Parameters:
+  Env:
+    Type: String
+    Default: production
   GitHubUser:
     Type: String
   GitHubToken:
@@ -100,7 +103,7 @@ Resources:
         PrivilegedMode: True
         EnvironmentVariables:
           - Name: NODE_ENV
-            Value: "production"
+            Value: !Ref Env
           - Name: API_KEY
             Value: !Ref ApiKey
       Name: !Sub "${AWS::StackName}-codebuild"
