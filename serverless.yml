@@ -139,7 +139,7 @@ resources:
         DistributionConfig:
           # Alias(CNAMEs)の設定はSSL証明書の設定が必要
           Aliases:
-            - Ref: FullDomain
+            - ${self:custom.PARAMS.FULL_DOMAIN}
           ViewerCertificate:
             AcmCertificateArn: ${self:custom.PARAMS.SSL_ARN}
             MinimumProtocolVersion: TLSv1_2016 # 現時点でのRecommended
