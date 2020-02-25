@@ -1,8 +1,6 @@
 /* eslint-disable no-console */
 const NODE_ENV = process.env.NODE_ENV || 'development'
 console.log('NODE_ENV: ', NODE_ENV)
-const HAS_LAMBDA = process.env.HAS_LAMBDA === 'false' ? false : !!process.env.HAS_LAMBDA
-console.log('HAS_LAMBDA: ', HAS_LAMBDA)
 
 module.exports = () => {
   return {
@@ -12,7 +10,6 @@ module.exports = () => {
     DOMAIN: process.env.DOMAIN,
     FULL_DOMAIN: process.env.FULL_DOMAIN,
     SSL_ARN: process.env.SSL_ARN,
-    LAMBDA_ARN: process.env.LAMBDA_ARN,
-    HAS_LAMBDA
+    LAMBDA_ARN: process.env.LAMBDA_ARN
   }
 }
