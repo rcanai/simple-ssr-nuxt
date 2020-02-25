@@ -16,7 +16,6 @@ $ source ~/.bash_profile;
 $ brew install yarn --ignore-dependencies;
 ```
 
-
 ### node-gyp Bug :)
 
 ```bash
@@ -64,24 +63,66 @@ Run on CodePipeline.
 
 ## Cloudformation
 
+## Local Env Setting
+
+Local Only
+
+```bash
+$ export NODE_ENV=development \
+  API_KEY=FIXME12345FIXME12345FIXME12345FIXME12345 \
+  DOMAIN=rcanai.jp \
+  FULL_DOMAIN=simple-sls-nuxt.rcanai.jp \
+  AWS_PROFILE=XXX;
+```
+
+## 0. Create Domain
+
+```bash
+$ yarn run sls:create_domain;
+```
+
 ### 1. Deploy Environment
 
 ```bash
 # First (Create Stack)
-$ aws cloudformation deploy --template-file aws/deploy-cfn.yml --stack-name simple-sls-nuxt-deploy --capabilities CAPABILITY_NAMED_IAM --parameter-overrides ApiKey=XXX GitHubUser=XXX GitHubToken=XXX --profile XXX;
+$ aws cloudformation deploy \
+  --template-file aws/cfn.yml \
+  --stack-name development-simple-sls-nuxt-deploy \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --parameter-overrides \
+  Env=development \
+  ApiKey=XXX \
+  GitHubUser=XXX \
+  GitHubToken=XXX \
+  --profile XXX;
 
 # Second etc (Update Stack)
-$ aws cloudformation deploy --capabilities CAPABILITY_NAMED_IAM --template-file aws/deploy-cfn.yml --stack-name simple-sls-nuxt-deploy --profile XXX;
+$ aws cloudformation deploy \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --template-file aws/cfn.yml \
+  --stack-name development-simple-sls-nuxt-deploy \
+  --profile XXX;
 ```
 
 ### 2. Front End Environment
 
 ```bash
 # First (Create Stack)
-$ aws cloudformation deploy --template-file aws/front-cfn.yml --stack-name simple-sls-nuxt-front --parameter-overrides SlsApiId=XXX SSLArn=XXX --profile XXX;
+$ aws cloudformation deploy \
+  --template-file aws/front-cfn.yml \
+  --stack-name development-simple-sls-nuxt-front \
+  --parameter-overrides \
+  Env=development \
+  SlsApiId=XXX \
+  SSLArn=XXX \
+  BasicAuthLambdaArn=XXX \
+  --profile XXX;
 
 # Second etc (Update Stack)
-$ aws cloudformation deploy --template-file aws/front-cfn.yml --stack-name simple-sls-nuxt-front --profile XXX;
+$ aws cloudformation deploy \
+  --template-file aws/front-cfn.yml \
+  --stack-name development-simple-sls-nuxt-front \
+  --profile XXX;
 ```
 
 **The first deployment takes about 40 minutes :(**
@@ -98,7 +139,7 @@ $ yarn run sls:remove;
 ### Cloudformation
 
 ```bash
-$ aws cloudformation delete-stack --stack-name simple-sls-nuxt-front --profile XXX;
-$ aws s3 rm s3://simple-sls-nuxt-deploy --recursive --profile XXX;
-$ aws cloudformation delete-stack --stack-name simple-sls-nuxt-deploy --profile XXX;
+$ aws cloudformation delete-stack --stack-name development-simple-sls-nuxt-front --profile XXX;
+$ aws s3 rm s3://development-simple-sls-nuxt-deploy --recursive --profile XXX;
+$ aws cloudformation delete-stack --stack-name development-simple-sls-nuxt-deploy --profile XXX;
 ```

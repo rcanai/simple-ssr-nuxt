@@ -8,6 +8,9 @@ Parameters:
     Type: String
   GitHubToken:
     Type: String
+  GitHubBranch:
+    Type: String
+    Default: "master"
   ApiKey:
     Type: String
 
@@ -134,7 +137,7 @@ Resources:
               Configuration:
                 Owner: !Ref GitHubUser
                 Repo: "simple-sls-nuxt"
-                Branch: "master"
+                Branch: !Ref GitHubBranch
                 OAuthToken: !Ref GitHubToken
                 PollForSourceChanges: false
               OutputArtifacts:

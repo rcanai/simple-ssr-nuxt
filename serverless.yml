@@ -1,4 +1,4 @@
-service: simple-sls-nuxt
+service: ${self:custom.PARAMS.NODE_ENV}-slsnuxt
 
 provider:
   name: aws
@@ -7,7 +7,7 @@ provider:
   region: ap-northeast-1
   logRetentionInDays: 7
   apiKeys:
-    - name: simple-sls-nuxt-apiKey
+    - name: ${self:custom.PARAMS.NODE_ENV}-slsnuxt-apiKey
       value: ${self:custom.PARAMS.API_KEY}
   environment:
     NODE_ENV: ${self:custom.PARAMS.NODE_ENV}
@@ -75,8 +75,8 @@ custom:
   s3Sync:
     - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
       acl: public-read
-      bucketPrefix: ''
-      localDir: 'client/static'
+      bucketPrefix: ""
+      localDir: "client/static"
     # - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
     #   acl: public-read
     #   bucketPrefix: '_nuxt/images'
@@ -84,6 +84,11 @@ custom:
 
 resources:
   Resources:
+    # AWS Api ApiGateway
+    MyApiGW:
+      Type: AWS::ApiGateway::RestApi
+      Properties:
+        Name: MyApiGW
     # S3: 静的ファイル用のS3バケット
     StaticS3Bucket:
       Type: AWS::S3::Bucket
@@ -105,7 +110,7 @@ resources:
                 Fn::Join:
                   - " "
                   - - "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity"
-                    - Ref: SimpleSlsNuxtCFOriginAccessIdentity
+                    - Ref: CFOriginAccessIdentity
             Resource: "arn:aws:s3:::${self:custom.PARAMS.S3_BUCKET_NAME}/*"
     # Cloud Front: 静的ファイル用のIdentity
     CFOriginAccessIdentity:
@@ -119,9 +124,16 @@ resources:
       Value:
         Ref: CFOriginAccessIdentity
       Export:
-        Name: SimpleSlsNuxtCFOriginAccessIdentity
+        Name: CFOriginAccessIdentity
     StaticS3BucketDomainName:
       Value:
         Fn::GetAtt: StaticS3Bucket.DomainName
       Export:
-        Name: SimpleSlsNuxtStaticS3BucketDomainName
+        Name: StaticS3BucketDomainName
+    ApiGatewayRestApiId001:
+      Value:
+        Ref: MyApiGW
+      Export:
+        Name: ApiGatewayRestApiId
+
+
