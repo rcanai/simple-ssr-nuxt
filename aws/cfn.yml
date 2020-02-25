@@ -13,6 +13,8 @@ Parameters:
     Default: "master"
   ApiKey:
     Type: String
+  SSLArn:
+    Type: String
   LambdaArn:
     Type: String
     Default: ""
@@ -22,6 +24,10 @@ Parameters:
   FullDomain:
     Type: String
     Default: "dev-simple-ssl-nuxt.rcanai.jp"
+
+Conditions:
+  # Basic認証の有無
+  HasLambda: !Not [!Equals [!Ref LambdaArn, "" ]]
 
 Resources:
   # ------
@@ -124,6 +130,14 @@ Resources:
             Value: !Ref Domain
           - Name: FULL_DOMAIN
             Value: !Ref FullDomain
+          - Name: SSL_ARN
+            Value: !Ref SSLArn
+          - Name: HAS_LAMBDA
+            Value:
+              !If
+                - HasLambda
+                - "true"
+                - "false"
       Name: !Sub "${AWS::StackName}-codebuild"
       ServiceRole: !Ref DeployCodeBuildServiceRole
       QueuedTimeoutInMinutes: 15

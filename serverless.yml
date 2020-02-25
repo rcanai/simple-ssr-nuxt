@@ -67,10 +67,10 @@ plugins:
 custom:
   PARAMS: ${file(aws/sls-params.js)}
   lambdaFunctionAssociations:
-    development:
+    true:
       - EventType: viewer-request
         LambdaFunctionARN: ${self:custom.PARAMS.LAMBDA_ARN}
-    production:
+    false:
       - []
   apigwBinary:
     types:
@@ -176,7 +176,7 @@ resources:
           DefaultCacheBehavior:
             TargetOriginId: ApiGwOriginId
             ViewerProtocolPolicy: redirect-to-https
-            LambdaFunctionAssociations: ${self:custom.lambdaFunctionAssociations.${self:custom.PARAMS.NODE_ENV}}
+            LambdaFunctionAssociations: ${self:custom.lambdaFunctionAssociations.${self:custom.PARAMS.HAS_LAMBDA}}
             ForwardedValues:
               QueryString: false
               Cookies:
