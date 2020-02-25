@@ -233,15 +233,10 @@ resources:
 
   # 出力値
   Outputs:
-    StaticS3BucketDomainName:
-      Value:
-        Fn::GetAtt: StaticS3Bucket.DomainName
-      Export:
-        Name: StaticS3BucketDomainName
     ApiGatewayRestApiId001:
       Value:
         Ref: ApiGatewayRestApi # APIGWのID (Serverlessの仕様)
       Export:
-        Name: ApiGatewayRestApiId
+        Name: ApiGatewayRestApiId # 現状未使用
 
 
