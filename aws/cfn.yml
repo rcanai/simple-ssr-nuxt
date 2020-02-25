@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
   Env:
     Type: String
-    Default: production
+    Default: "development"
   GitHubUser:
     Type: String
   GitHubToken:
@@ -13,6 +13,15 @@ Parameters:
     Default: "master"
   ApiKey:
     Type: String
+  LambdaArn:
+    Type: String
+    Default: ""
+  Domain:
+    Type: String
+    Default: "rcanai.jp"
+  FullDomain:
+    Type: String
+    Default: "dev-simple-ssl-nuxt.rcanai.jp"
 
 Resources:
   # ------
@@ -109,6 +118,12 @@ Resources:
             Value: !Ref Env
           - Name: API_KEY
             Value: !Ref ApiKey
+          - Name: LAMBDA_ARN
+            Value: !Ref LambdaArn
+          - Name: DOMAIN
+            Value: !Ref Domain
+          - Name: FULL_DOMAIN
+            Value: !Ref FullDomain
       Name: !Sub "${AWS::StackName}-codebuild"
       ServiceRole: !Ref DeployCodeBuildServiceRole
       QueuedTimeoutInMinutes: 15
@@ -168,7 +183,7 @@ Resources:
         SecretToken: !Ref GitHubToken
       Filters:
         - JsonPath: "$.ref"
-          MatchEquals: 'refs/heads/{Branch}'
+          MatchEquals: "refs/heads/{Branch}"
       TargetPipeline: !Ref DeployCodePipeline
       TargetAction: App
       Name: !Sub "${AWS::StackName}-codepipeline-webhook"
