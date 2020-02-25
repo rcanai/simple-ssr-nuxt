@@ -84,10 +84,6 @@ custom:
 
 # CloudFormation
 resources:
-  Conditions:
-    # Basic認証の有無
-    HasLambda: Fn::Not: [Fn::Equals: [${self:custom.PARAMS.LAMBDA_ARN}, "" ]]
-
   Resources:
     # ------
     # S3: 静的ファイル用のS3バケット
@@ -144,7 +140,11 @@ resources:
             SslSupportMethod: sni-only
           Origins:
             - Id: ApiGwOriginId
-              DomainName: Fn::Sub: "${ApiGatewayRestApi}.execute-api.ap-northeast-1.amazonaws.com"
+              DomainName:
+                Fn::Join:
+                  - " "
+                  - - Ref: ApiGatewayRestApi
+                    - ".execute-api.ap-northeast-1.amazonaws.com"
               OriginPath: "/${self:custom.PARAMS.NODE_ENV}"
               CustomOriginConfig:
                 HTTPPort: 80
@@ -171,8 +171,8 @@ resources:
             TargetOriginId: ApiGwOriginId
             ViewerProtocolPolicy: redirect-to-https
             LambdaFunctionAssociations:
-              !If
-                - HasLambda
+              Fn::If:
+                - ${self:custom.PARAMS.HAS_LAMBDA}
                 - - EventType: viewer-request
                     LambdaFunctionARN: ${self:custom.PARAMS.LAMBDA_ARN}
                 - []
@@ -222,7 +222,7 @@ resources:
       Type: AWS::Route53::RecordSet
       Properties:
         HostedZoneName: "${self:custom.PARAMS.DOMAIN}."
-        Name: "$${self:custom.PARAMS.FULL_DOMAIN}."
+        Name: "${self:custom.PARAMS.FULL_DOMAIN}."
         Type: A
         AliasTarget:
           HostedZoneId: Z2FDTNDATAQYW2 # CloudFrontなのでIDは固定

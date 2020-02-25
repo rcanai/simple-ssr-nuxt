@@ -23,6 +23,11 @@ Parameters:
     Type: String
     Default: "dev-simple-ssl-nuxt.rcanai.jp"
 
+# 条件
+Conditions:
+  # Basic認証の有無
+  HasLambda: !Not [!Equals [!Ref LambdaArn, "" ]]
+
 Resources:
   # ------
   # S3 Deploy Bucket
@@ -120,6 +125,8 @@ Resources:
             Value: !Ref ApiKey
           - Name: LAMBDA_ARN
             Value: !Ref LambdaArn
+          - Name: HAS_LAMBDA
+            Value: !Ref HasLambda
           - Name: DOMAIN
             Value: !Ref Domain
           - Name: FULL_DOMAIN

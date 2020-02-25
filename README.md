@@ -67,7 +67,7 @@ Run on CodePipeline.
 # First (Create Stack)
 $ aws cloudformation deploy \
   --template-file aws/cfn.yml \
-  --stack-name development-simple-sls-nuxt-deploy \
+  --stack-name development-simple-sls-nuxt \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameter-overrides \
   Env=development \
@@ -75,6 +75,7 @@ $ aws cloudformation deploy \
   GitHubToken=XXX \
   SSLArn=XXX \
   LambdaArn=XXX \
+  ApiKey=XXX \
   --profile XXX;
 
 
@@ -90,17 +91,16 @@ $ aws cloudformation deploy \
 
 ## Delete
 
+### Cloudformation
+
+```bash
+$ aws cloudformation delete-stack --stack-name development-simple-sls-nuxt --profile XXX;
+$ aws s3 rm s3://development-simple-sls-nuxt-deploy --recursive --profile XXX;
+```
+
 ### Serverless
 
 ```bash
 $ export AWS_PROFILE=XXX;
 $ yarn run sls:remove;
-```
-
-### Cloudformation
-
-```bash
-$ aws cloudformation delete-stack --stack-name development-simple-sls-nuxt-front --profile XXX;
-$ aws s3 rm s3://development-simple-sls-nuxt-deploy --recursive --profile XXX;
-$ aws cloudformation delete-stack --stack-name development-simple-sls-nuxt-deploy --profile XXX;
 ```
