@@ -126,7 +126,10 @@ Resources:
           - Name: LAMBDA_ARN
             Value: !Ref LambdaArn
           - Name: HAS_LAMBDA
-            Value: !Ref HasLambda
+            Value: !If
+              - HasLambda
+              - true
+              - false
           - Name: DOMAIN
             Value: !Ref Domain
           - Name: FULL_DOMAIN
