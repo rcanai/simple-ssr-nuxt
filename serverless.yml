@@ -148,7 +148,7 @@ resources:
             - Id: ApiGwOriginId
               DomainName:
                 Fn::Join:
-                  - " "
+                  - ""
                   - - Ref: ApiGatewayRestApi
                     - ".execute-api.ap-northeast-1.amazonaws.com"
               OriginPath: "/${self:custom.PARAMS.NODE_ENV}"
