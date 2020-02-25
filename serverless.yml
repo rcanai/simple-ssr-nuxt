@@ -160,7 +160,8 @@ resources:
                 - HeaderName: "X-API-KEY"
                   HeaderValue: ${self:custom.PARAMS.API_KEY}
             - Id: StaticS3Bucket
-              DomainName: StaticS3Bucket.DomainName
+              DomainName:
+                Fn::GetAtt: [StaticS3Bucket, DomainName]
               OriginPath: ""
               S3OriginConfig:
                 OriginAccessIdentity:
