@@ -136,7 +136,6 @@ $ aws cloudformation deploy \
   GitHubToken=XXX \
   SSLArn=XXX \
   LambdaArn=XXX \
-  ApiKey=XXX \
   --profile XXX;
 ```
 
