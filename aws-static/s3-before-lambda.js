@@ -11,7 +11,7 @@ exports.handler = async (event) => {
 
   if (!uri.includes('.')) {
     // 余計なスラッシュを消してhtml拡張子をつける
-    request.uri += '/' + uri.split('/').filter(Boolean).join('/') + '/index.html'
+    request.uri = '/' + uri.split('/').filter(Boolean).join('/') + '/index.html'
   }
 
   return request
