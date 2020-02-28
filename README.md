@@ -34,6 +34,13 @@ $ xcode-select --install;
 $ yarn install;
 $ yarn run dev;
 ```
+
+## Local generate
+
+```bash
+$ export IS_GENERATE=true;
+$ yarn run generate;
+```
 ___
 
 ## Create

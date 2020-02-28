@@ -7,11 +7,11 @@
 /* eslint-disable require-await */
 exports.handler = async (event) => {
   const request = event.Records[0].cf.request
-  const uri = request.uri // Ex. /users/1/profile
+  const uri = request.uri // '/users/1/profile'
 
   if (!uri.includes('.')) {
-    // 余計なスラッシュｗを消してhtml拡張子をつける
-    request.uri += '/' + uri.split('/').filter(Boolean).join('/') + '/index..html'
+    // 余計なスラッシュを消してhtml拡張子をつける
+    request.uri += '/' + uri.split('/').filter(Boolean).join('/') + '/index.html'
   }
 
   return request
