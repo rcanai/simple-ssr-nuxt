@@ -1,6 +1,6 @@
-# simple-sls-nuxt
+# simple-ssr-nuxt
 
-NuxtJS using a simple constitution serverless framework
+NuxtJS using a simple constitution  Server side render
 
 ## Constitution
 
@@ -31,7 +31,6 @@ $ xcode-select --install;
 ## Development
 
 ```bash
-$ cp sls-params.example.js sls-params.js
 $ yarn install;
 $ yarn run dev;
 ```
@@ -42,9 +41,9 @@ ___
 [create-nuxt-app](https://github.com/nuxt/create-nuxt-app)
 
 ```bash
-$ yarn create nuxt-app simple-sls-nuxt;
-✨  Generating Nuxt.js project in simple-sls-nuxt
-? Project name simple-sls-nuxt
+$ yarn create nuxt-app simple-ssr-nuxt;
+✨  Generating Nuxt.js project in simple-ssr-nuxt
+? Project name simple-ssr-nuxt
 ? Project description My first-rate Nuxt.js project
 ? Author name rcanai
 ? Choose the package manager Yarn
@@ -57,45 +56,58 @@ $ yarn create nuxt-app simple-sls-nuxt;
 ? Choose development tools jsconfig.json (Recommended for VS Code)
 ```
 
-## Deploy
+## [sls] Deploy
 
-Run on CodePipeline.
+Run on CodePipeline.  
+(Serverless Framework)
 
 ## Cloudformation
 
 ```bash
 # First (Create Stack)
 $ aws cloudformation deploy \
-  --template-file aws/cfn.yml \
-  --stack-name development-simple-sls-nuxt \
+  --template-file aws-sls/cfn.yml \
+  --stack-name staging-sls-nuxt \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameter-overrides \
-  Env=development \
+  Env=staging \
   GitHubUser=XXX \
   GitHubToken=XXX \
   SSLArn=XXX \
   LambdaArn=XXX \
   ApiKey=XXX \
   --profile XXX;
-
-
-# Second etc (Update Stack)
-$ aws cloudformation deploy \
-  --capabilities CAPABILITY_NAMED_IAM \
-  --template-file aws/cfn.yml \
-  --stack-name development-simple-sls-nuxt-deploy \
-  --profile XXX;
 ```
 
 **The first deployment takes about 40 minutes :(**
 
-## Delete
+```bash
+# Second etc (Update Stack)
+$ aws cloudformation deploy \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --template-file aws-sls/cfn.yml \
+  --stack-name staging-sls-nuxt-deploy \
+  --profile XXX;
+```
+
+```bash
+# Remove Basic Auth
+$ aws cloudformation deploy \
+  --template-file aws-sls/cfn.yml \
+  --stack-name staging-sls-nuxt \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --parameter-overrides \
+  LambdaArn="" \
+  --profile XXX;
+```
+
+## [sls] Delete
 
 ### Cloudformation
 
 ```bash
-$ aws cloudformation delete-stack --stack-name development-simple-sls-nuxt --profile XXX;
-$ aws s3 rm s3://development-simple-sls-nuxt-deploy --recursive --profile XXX;
+$ aws cloudformation delete-stack --stack-name staging-sls-nuxt --profile XXX;
+$ aws s3 rm s3://staging-sls-nuxt-deploy --recursive --profile XXX;
 ```
 
 ### Serverless
@@ -103,4 +115,47 @@ $ aws s3 rm s3://development-simple-sls-nuxt-deploy --recursive --profile XXX;
 ```bash
 $ export AWS_PROFILE=XXX;
 $ yarn run sls:remove;
+```
+
+## [static] Deploy
+
+Run on CodePipeline.  
+(Nuxt Generate Static pages)
+
+### Cloudformation
+
+```bash
+# First (Create Stack)
+$ aws cloudformation deploy \
+  --template-file aws-static/cfn.yml \
+  --stack-name staging-static-nuxt \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --parameter-overrides \
+  Env=staging \
+  GitHubUser=XXX \
+  GitHubToken=XXX \
+  SSLArn=XXX \
+  LambdaArn=XXX \
+  ApiKey=XXX \
+  --profile XXX;
+```
+
+**The first deployment takes about 40 minutes :(**
+
+```bash
+# Second etc (Update Stack)
+$ aws cloudformation deploy \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --template-file aws-static/cfn.yml \
+  --stack-name staging-static-nuxt-deploy \
+  --profile XXX;
+```
+
+## [sls] Delete
+
+### Cloudformation
+
+```bash
+$ aws cloudformation delete-stack --stack-name staging-static-nuxt --profile XXX;
+$ aws s3 rm s3://staging-static-nuxt-deploy --recursive --profile XXX;
 ```

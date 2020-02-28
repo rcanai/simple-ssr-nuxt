@@ -36,7 +36,7 @@ Resources:
   DeployS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: "simple-sls-nuxt-deploy"
+      BucketName: !Sub "${AWS::StackName}-deploy"
 
   # ------
   # IAM Role (CodeBuild)
@@ -116,7 +116,7 @@ Resources:
         Type: CODEPIPELINE
       Source:
         Type: CODEPIPELINE
-        BuildSpec: "aws/buildspec.yml"
+        BuildSpec: "aws-sls/buildspec.yml"
       Environment:
         ComputeType: BUILD_GENERAL1_SMALL
         Image: aws/codebuild/standard:3.0
@@ -168,7 +168,7 @@ Resources:
                 Provider: GitHub
               Configuration:
                 Owner: !Ref GitHubUser
-                Repo: "simple-sls-nuxt"
+                Repo: "simple-ssr-nuxt"
                 Branch: !Ref GitHubBranch
                 OAuthToken: !Ref GitHubToken
                 PollForSourceChanges: false
@@ -206,9 +206,3 @@ Resources:
       Name: !Sub "${AWS::StackName}-codepipeline-webhook"
       TargetPipelineVersion: !GetAtt DeployCodePipeline.Version
       RegisterWithThirdParty: true
-
-Outputs:
-  SimpleSlsNuxtApiKey:
-    Value: !Ref ApiKey
-    Export:
-      Name: SimpleSlsNuxtApiKey

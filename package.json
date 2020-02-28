@@ -1,5 +1,5 @@
 {
-  "name": "simple-sls-nuxt",
+  "name": "simple-ssr-nuxt",
   "version": "1.0.0",
   "description": "My first-rate Nuxt.js project",
   "author": "rcanai",
@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
+    "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "sls:deploy": "sls deploy --verbose",
     "sls:remove": "sls remove --verbose",

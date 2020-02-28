@@ -1,0 +1,276 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  Env:
+    Type: String
+    Default: "staging"
+  GitHubUser:
+    Type: String
+  GitHubToken:
+    Type: String
+  GitHubBranch:
+    Type: String
+    Default: "master"
+  SSLArn:
+    Type: String
+  LambdaArn:
+    Type: String
+    Default: ""
+  Domain:
+    Type: String
+    Default: "rcanai.jp"
+  FullDomain:
+    Type: String
+    Default: "spa-nuxt.rcanai.jp"
+
+Conditions:
+  # Basic認証の有無
+  HasLambda: !Not [!Equals [!Ref LambdaArn, "" ]]
+
+Resources:
+  # ------
+  # Cloud Front AccessIdentity
+  # ------
+  FrontEndCFAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub "${AWS::StackName}"
+
+  # ------
+  # S3 (FrontEnd)
+  # ------
+  FrontEndBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref FullDomain
+
+  FrontEndBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref FrontEndBucket
+      PolicyDocument:
+        Statement:
+          - Action: s3:GetObject
+            Effect: Allow
+            Resource: !Sub arn:aws:s3:::${FrontEndBucket}/*
+            Principal:
+              AWS: !Sub arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${FrontEndCFAccessIdentity}
+
+  # ------
+  # S3 (CodePipeline)
+  # ------
+  CodePipelineBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${AWS::StackName}-codepipeline"
+
+  # ------
+  # CloudFront Distribution
+  # ------
+  FrontEndCFDist:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: !Ref AWS::StackName
+        IPV6Enabled: true
+        Aliases:
+          - !Ref FullDomain
+        HttpVersion: http2
+        Origins:
+          - Id: S3Origin
+            DomainName: !GetAtt FrontEndBucket.DomainName
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub origin-access-identity/cloudfront/${FrontEndCFAccessIdentity}
+        Enabled: true
+        DefaultRootObject: index.html
+        DefaultCacheBehavior:
+          TargetOriginId: S3Origin
+          SmoothStreaming: false
+          ForwardedValues:
+            QueryString: true
+          ViewerProtocolPolicy: redirect-to-https
+          LambdaFunctionAssociations:
+            !If
+              - HasLambda
+              - - EventType: viewer-request
+                  LambdaFunctionARN: !Ref LambdaArn
+              - []
+        ViewerCertificate:
+          AcmCertificateArn: !Ref SSLArn
+          MinimumProtocolVersion: TLSv1_2016
+          SslSupportMethod: sni-only
+        CustomErrorResponses:
+          - ErrorCachingMinTTL: 3600
+            ErrorCode: 403
+            ResponsePagePath: "/index.html"
+            ResponseCode: 200
+          - ErrorCachingMinTTL: 3600
+            ErrorCode: 404
+            ResponsePagePath: "/index.html"
+            ResponseCode: 200
+
+  # ------
+  # IAM Role (CodeBuild)
+  # ------
+  CodeBuildServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-codebuild"
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - "cloudformation:*"
+                  - "cloudfront:*"
+                  - "iam:*"
+                  - "logs:*"
+                  - "s3:*"
+
+  # ------
+  # IAM Role (CodePipeline)
+  # ------
+  CodePipelineServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-codepipeline"
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codepipeline.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource: !Sub "arn:aws:s3:::${CodePipelineBucket}/*"
+                Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:GetObjectVersion
+                  - s3:GetBucketVersioning
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - codebuild:StartBuild
+                  - codebuild:BatchGetBuilds
+                  - iam:PassRole
+
+  # ------
+  # CodeBuild
+  # ------
+  DeployCodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: "aws/buildspec.yml"
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:3.0
+        Type: LINUX_CONTAINER
+        PrivilegedMode: True
+        EnvironmentVariables:
+          - Name: NODE_ENV
+            Value: !Ref Env
+          - Name: CLOUDFRONT_ID
+            Value: !Ref FrontEndCFDist
+          - Name: FRONTEND_BUCKET
+            Value: !Ref FrontEndBucket
+      Name: !Sub "${AWS::StackName}-codebuild"
+      ServiceRole: !Ref CodeBuildServiceRole
+      QueuedTimeoutInMinutes: 15
+      TimeoutInMinutes: 10
+
+  # ------
+  # CodePipeline
+  # ------
+  DeployCodePipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      Name: !Sub "${AWS::StackName}-codepipeline"
+      RoleArn: !GetAtt CodePipelineServiceRole.Arn
+      ArtifactStore:
+        Type: S3
+        Location: !Ref CodePipelineBucket
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: App
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Version: 1
+                Provider: GitHub
+              Configuration:
+                Owner: !Ref GitHubUser
+                Repo: "simple-spa-nuxt"
+                Branch: !Ref GitHubBranch
+                OAuthToken: !Ref GitHubToken
+                PollForSourceChanges: false
+              OutputArtifacts:
+                - Name: App
+              RunOrder: 1
+        - Name: Build
+          Actions:
+            - Name: Build
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: 1
+                Provider: CodeBuild
+              Configuration:
+                ProjectName: !Ref DeployCodeBuildProject
+              InputArtifacts:
+                - Name: App
+              RunOrder: 1
+
+  # ------
+  # CodePipeline Webhook
+  # ------
+  PipelineWebhook:
+    Type: AWS::CodePipeline::Webhook
+    Properties:
+      Authentication: GITHUB_HMAC
+      AuthenticationConfiguration:
+        SecretToken: !Ref GitHubToken
+      Filters:
+        - JsonPath: "$.ref"
+          MatchEquals: 'refs/heads/{Branch}'
+      TargetPipeline: !Ref DeployCodePipeline
+      TargetAction: App
+      Name: !Sub "${AWS::StackName}-codepipeline-webhook"
+      TargetPipelineVersion: !GetAtt DeployCodePipeline.Version
+      RegisterWithThirdParty: true
+
+  # ------
+  # Route53 RecordSet
+  # ------
+  Route53RecordSet:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: !Sub "${Domain}."
+      Name: !Sub "${FullDomain}."
+      Type: A
+      AliasTarget:
+        HostedZoneId: Z2FDTNDATAQYW2 # CloudFrontなのでIDは固定
+        DNSName: !GetAtt FrontEndCFDist.DomainName

@@ -12,14 +12,14 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'simple-sls-nuxt',
+    title: 'simple-ssr-nuxt',
     htmlAttrs: {
       lang: 'ja'
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'simple-sls-nuxt' }
+      { hid: 'description', name: 'description', content: 'simple-ssr-nuxt' }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
