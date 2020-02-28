@@ -4,7 +4,7 @@
 let generate
 if (process.env.IS_GENERATE) {
   generate = {
-    subFolders: false, // すべてを/index.htmlで生成
+    subFolders: true, // すべてを/index.htmlで生成
     async routes () {
       try {
         // const { data } = require('axios').get('https://my-api/users')
