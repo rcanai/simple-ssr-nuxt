@@ -86,7 +86,7 @@ $ aws cloudformation deploy \
 $ aws cloudformation deploy \
   --capabilities CAPABILITY_NAMED_IAM \
   --template-file aws-sls/cfn.yml \
-  --stack-name staging-sls-nuxt-deploy \
+  --stack-name staging-sls-nuxt \
   --profile XXX;
 ```
 
@@ -107,7 +107,7 @@ $ aws cloudformation deploy \
 
 ```bash
 $ aws cloudformation delete-stack --stack-name staging-sls-nuxt --profile XXX;
-$ aws s3 rm s3://staging-sls-nuxt-deploy --recursive --profile XXX;
+$ aws s3 rm s3://staging-sls-nuxt --recursive --profile XXX;
 ```
 
 ### Serverless
@@ -146,7 +146,7 @@ $ aws cloudformation deploy \
 $ aws cloudformation deploy \
   --capabilities CAPABILITY_NAMED_IAM \
   --template-file aws-static/cfn.yml \
-  --stack-name staging-static-nuxt-deploy \
+  --stack-name staging-static-nuxt \
   --profile XXX;
 ```
 
@@ -156,5 +156,5 @@ $ aws cloudformation deploy \
 
 ```bash
 $ aws cloudformation delete-stack --stack-name staging-static-nuxt --profile XXX;
-$ aws s3 rm s3://staging-static-nuxt-deploy --recursive --profile XXX;
+$ aws s3 rm s3://staging-static-nuxt --recursive --profile XXX;
 ```

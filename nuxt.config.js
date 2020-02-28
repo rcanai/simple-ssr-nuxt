@@ -1,19 +1,16 @@
-/* eslint-disable no-console */
 /* eslint-disable nuxt/no-cjs-in-config */
-const axios = require('axios')
-const IS_STATIC = !!process.env.IS_STATIC
-console.log('IS_STATIC: ', IS_STATIC) // 静的ジェネレータフラグ
+/* eslint-disable require-await */
 
-// 静的ジェネレート設定
 let generate
-if (IS_STATIC) {
+if (process.env.IS_GENERATE) {
   generate = {
     subFolders: false, // すべてを/index.htmlで生成
     async routes () {
       try {
-        const { data } = await axios.get('https://my-api/users')
-        return data.map((user) => {
-          return '/users/' + user.id
+        // const { data } = require('axios').get('https://my-api/users')
+        const data = [{ id: 1 }, { id: 2 }, { id: 9 }]
+        return data.map((article) => {
+          return `/articles/${article.id}`
         })
       } catch (e) {
         return e

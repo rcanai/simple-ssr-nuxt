@@ -1,6 +1,6 @@
 <template>
   <div>
-    articleId
+    {{ articleId }}
   </div>
 </template>
 
