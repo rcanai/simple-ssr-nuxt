@@ -4,6 +4,7 @@
 let generate
 if (process.env.IS_GENERATE) {
   generate = {
+    fallback: true, // 404.htmlを生成
     subFolders: true, // すべてを/index.htmlで生成
     async routes () {
       try {

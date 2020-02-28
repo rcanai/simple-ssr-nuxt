@@ -102,12 +102,12 @@ Resources:
         CustomErrorResponses:
           - ErrorCachingMinTTL: 3600
             ErrorCode: 403
-            ResponsePagePath: "/index.html"
-            ResponseCode: 200
+            ResponsePagePath: "/404.html"
+            ResponseCode: 404
           - ErrorCachingMinTTL: 3600
             ErrorCode: 404
-            ResponsePagePath: "/index.html"
-            ResponseCode: 200
+            ResponsePagePath: "/404.html"
+            ResponseCode: 404
 
   # ------
   # IAM Role (CodeBuild)
