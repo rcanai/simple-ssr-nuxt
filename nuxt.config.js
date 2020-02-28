@@ -1,12 +1,31 @@
 /* eslint-disable no-console */
 /* eslint-disable nuxt/no-cjs-in-config */
-
+const axios = require('axios')
 const IS_STATIC = !!process.env.IS_STATIC
 console.log('IS_STATIC: ', IS_STATIC) // 静的ジェネレータフラグ
+
+// 静的ジェネレート設定
+let generate
+if (IS_STATIC) {
+  generate = {
+    subFolders: false, // すべてを/index.htmlで生成
+    async routes () {
+      try {
+        const { data } = await axios.get('https://my-api/users')
+        return data.map((user) => {
+          return '/users/' + user.id
+        })
+      } catch (e) {
+        return e
+      }
+    }
+  }
+}
 
 module.exports = {
   mode: 'universal',
   srcDir: 'client/',
+  generate,
   router: {
     // ここを/STAGE_NAME/に変更すればAPIGWのURLのままアクセスできる。
     // 基本的にはCloudFrontで参照するため、変更の必要はない。

@@ -15,7 +15,6 @@ Parameters:
     Type: String
   LambdaArn:
     Type: String
-    Default: ""
   Domain:
     Type: String
     Default: "rcanai.jp"
@@ -93,7 +92,7 @@ Resources:
           LambdaFunctionAssociations:
             !If
               - HasLambda
-              - - EventType: viewer-request
+              - - EventType: origin-request
                   LambdaFunctionARN: !Ref LambdaArn
               - []
         ViewerCertificate:
