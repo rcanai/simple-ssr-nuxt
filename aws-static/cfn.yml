@@ -135,6 +135,7 @@ Resources:
                 Action:
                   - "cloudformation:*"
                   - "cloudfront:*"
+                  - "cloudwatch:*"
                   - "iam:*"
                   - "logs:*"
                   - "s3:*"
@@ -183,7 +184,7 @@ Resources:
         Type: CODEPIPELINE
       Source:
         Type: CODEPIPELINE
-        BuildSpec: "aws/buildspec.yml"
+        BuildSpec: "aws-static/buildspec.yml"
       Environment:
         ComputeType: BUILD_GENERAL1_SMALL
         Image: aws/codebuild/standard:3.0
@@ -223,7 +224,7 @@ Resources:
                 Provider: GitHub
               Configuration:
                 Owner: !Ref GitHubUser
-                Repo: "simple-spa-nuxt"
+                Repo: "simple-ssr-nuxt"
                 Branch: !Ref GitHubBranch
                 OAuthToken: !Ref GitHubToken
                 PollForSourceChanges: false

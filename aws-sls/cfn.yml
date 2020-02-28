@@ -64,13 +64,13 @@ Resources:
                   - "apigateway:*"
                   - "cloudformation:*"
                   - "cloudfront:*"
+                  - "cloudwatch:*"
                   - "execute-api:Invoke"
                   - "iam:*"
                   - "lambda:*"
                   - "logs:*"
-                  - "s3:*"
                   - "route53:*"
-                  - "cloudwatch:*"
+                  - "s3:*"
 
   # ------
   # IAM Role (CodePipeline)

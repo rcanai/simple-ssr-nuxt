@@ -1,5 +1,9 @@
-
+/* eslint-disable no-console */
 /* eslint-disable nuxt/no-cjs-in-config */
+
+const IS_STATIC = !!process.env.IS_STATIC
+console.log('IS_STATIC: ', IS_STATIC) // 静的ジェネレータフラグ
+
 module.exports = {
   mode: 'universal',
   srcDir: 'client/',
