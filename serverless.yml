@@ -136,11 +136,11 @@ resources:
       Value:
         Ref: ApiGatewayRestApi # APIGWのID (Serverlessの仕様)
       Export:
-        Name: ${self:custom.PARAMS.NODE_ENV}-slsnuxt-apiKey
+        Name: ${self:custom.PARAMS.NODE_ENV}-slsnuxt-apiId
     ApiGatewayApiKey:
       Value: ${self:custom.PARAMS.API_KEY}
       Export:
-        Name: ${self:custom.PARAMS.NODE_ENV}-slsnuxt-apiId
+        Name: ${self:custom.PARAMS.NODE_ENV}-slsnuxt-apiKey
     CFOriginAccessIdentity:
       Value: 
         Ref: CFOriginAccessIdentity
