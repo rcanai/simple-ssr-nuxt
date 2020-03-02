@@ -142,7 +142,8 @@ resources:
       Export:
         Name: ${self:custom.PARAMS.NODE_ENV}-slsnuxt-apiId
     CFOriginAccessIdentity:
-      Value: CFOriginAccessIdentity
+      Value: 
+        Ref: CFOriginAccessIdentity
       Export:
         Name: ${self:custom.PARAMS.NODE_ENV}-slsnuxt-cfOAI
     StaticS3BucketDomainName:
