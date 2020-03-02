@@ -65,43 +65,54 @@ $ yarn create nuxt-app simple-ssr-nuxt;
 
 ## [sls] Deploy
 
-Run on CodePipeline.  
-(Serverless Framework)
-
-## Cloudformation
-
 ```bash
-# First (Create Stack)
+# 1. First (Create Stack) - Codepipeline ~ Serverless
 $ aws cloudformation deploy \
-  --template-file aws-sls/cfn.yml \
-  --stack-name staging-sls-nuxt \
+  --template-file aws-sls/cfn-deploy.yml \
+  --stack-name staging-sls-nuxt-deploy \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameter-overrides \
   Env=staging \
   GitHubUser=XXX \
   GitHubToken=XXX \
+  ApiKey=XXX \
+  --profile XXX;
+
+# 2. First (Create Stack) - Cloudfront ~ Rout53
+$ aws cloudformation deploy \
+  --template-file aws-sls/cfn-front.yml \
+  --stack-name staging-sls-nuxt-front \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --parameter-overrides \
+  Env=staging \
   SSLArn=XXX \
   LambdaArn=XXX \
-  ApiKey=XXX \
   --profile XXX;
 ```
 
 **The first deployment takes about 40 minutes :(**
 
 ```bash
-# Second etc (Update Stack)
+# 1. Second and more (Update Stack) - Codepipeline ~ Serverless
 $ aws cloudformation deploy \
   --capabilities CAPABILITY_NAMED_IAM \
-  --template-file aws-sls/cfn.yml \
-  --stack-name staging-sls-nuxt \
+  --template-file aws-sls/cfn-deploy.yml \
+  --stack-name staging-sls-nuxt-deploy \
+  --profile XXX;
+
+# 2. Second and more (Update Stack) - Cloudfront ~ Rout53
+$ aws cloudformation deploy \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --template-file aws-sls/cfn-front.yml \
+  --stack-name staging-sls-nuxt-front \
   --profile XXX;
 ```
 
 ```bash
 # Remove Basic Auth
 $ aws cloudformation deploy \
-  --template-file aws-sls/cfn.yml \
-  --stack-name staging-sls-nuxt \
+  --template-file aws-sls/cfn-front.yml \
+  --stack-name staging-sls-nuxt-front \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameter-overrides \
   LambdaArn="" \
@@ -110,26 +121,14 @@ $ aws cloudformation deploy \
 
 ## [sls] Delete
 
-### Cloudformation
-
 ```bash
 $ aws cloudformation delete-stack --stack-name staging-sls-nuxt --profile XXX;
 $ aws s3 rm s3://staging-sls-nuxt --recursive --profile XXX;
 ```
 
-### Serverless
-
-```bash
-$ export AWS_PROFILE=XXX;
-$ yarn run sls:remove;
-```
+___
 
 ## [static] Deploy
-
-Run on CodePipeline.  
-(Nuxt Generate Static pages)
-
-### Cloudformation
 
 ```bash
 # First (Create Stack)
@@ -158,8 +157,6 @@ $ aws cloudformation deploy \
 ```
 
 ## [sls] Delete
-
-### Cloudformation
 
 ```bash
 $ aws cloudformation delete-stack --stack-name staging-static-nuxt --profile XXX;
