@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-const NODE_ENV = process.env.NODE_ENV || 'development'
+const NODE_ENV = process.env.NODE_ENV || 'staging'
 console.log('NODE_ENV: ', NODE_ENV)
 
 module.exports = () => {

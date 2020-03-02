@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
   Env:
     Type: String
-    Default: "development"
+    Default: "staging"
   GitHubUser:
     Type: String
   GitHubToken:
@@ -12,8 +12,6 @@ Parameters:
     Type: String
     Default: "master"
   ApiKey:
-    Type: String
-  SSLArn:
     Type: String
 
 Resources:

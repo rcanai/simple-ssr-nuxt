@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
   Env:
     Type: String
-    Default: "development"
+    Default: "staging"
   SSLArn:
     Type: String
   LambdaArn:
