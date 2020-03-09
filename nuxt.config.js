@@ -4,18 +4,14 @@
 let generate
 if (process.env.IS_GENERATE) {
   generate = {
-    fallback: true, // 404.htmlを生成
-    subFolders: true, // すべてを/index.htmlで生成
+    fallback: true, // /404.htmlを生成
+    subFolders: true, // すべてを**/index.htmlで生成
     async routes () {
-      try {
-        // const { data } = require('axios').get('https://my-api/users')
-        const data = [{ id: 1 }, { id: 2 }, { id: 9 }]
-        return data.map((article) => {
-          return `/articles/${article.id}`
-        })
-      } catch (e) {
-        return e
-      }
+      // const { data } = require('axios').get('https://my-api/users')
+      const data = [{ id: 1 }, { id: 2 }, { id: 9 }]
+      return data.map((article) => {
+        return `/articles/${article.id}`
+      })
     }
   }
 }
