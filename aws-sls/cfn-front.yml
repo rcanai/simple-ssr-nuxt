@@ -6,7 +6,7 @@ Parameters:
     Default: "staging"
   SSLArn:
     Type: String
-  LambdaArn:
+  BasicAuthLambdaArn:
     Type: String
     Default: ""
   Domain:
@@ -18,7 +18,7 @@ Parameters:
 
 Conditions:
   # Basic認証の有無
-  HasLambda: !Not [!Equals [!Ref LambdaArn, "" ]]
+  HasBasicAuthLambda: !Not [!Equals [!Ref BasicAuthLambdaArn, "" ]]
 
 Resources:
   # ------
@@ -71,9 +71,9 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
           LambdaFunctionAssociations:
             !If
-              - HasLambda
+              - HasBasicAuthLambda
               - - EventType: viewer-request
-                  LambdaFunctionARN: !Ref LambdaArn
+                  LambdaFunctionARN: !Ref BasicAuthLambdaArn
               - []
           ForwardedValues:
             QueryString: false

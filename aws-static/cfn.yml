@@ -13,7 +13,10 @@ Parameters:
     Default: "master"
   SSLArn:
     Type: String
-  LambdaArn:
+  BasicAuthLambdaArn:
+    Type: String
+    Default: ""
+  RedirectLambdaArn:
     Type: String
   Domain:
     Type: String
@@ -24,7 +27,7 @@ Parameters:
 
 Conditions:
   # Basic認証の有無
-  HasLambda: !Not [!Equals [!Ref LambdaArn, "" ]]
+  HasBasicAuthLambda: !Not [!Equals [!Ref BasicAuthLambdaArn, "" ]]
 
 Resources:
   # ------
@@ -91,10 +94,13 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
           LambdaFunctionAssociations:
             !If
-              - HasLambda
+              - HasBasicAuthLambda
+              - - EventType: viewer-request
+                  LambdaFunctionARN: !Ref BasicAuthLambdaArn
+                - EventType: origin-request
+                  LambdaFunctionARN: !Ref RedirectLambdaArn
               - - EventType: origin-request
-                  LambdaFunctionARN: !Ref LambdaArn
-              - []
+                  LambdaFunctionARN: !Ref RedirectLambdaArn
         ViewerCertificate:
           AcmCertificateArn: !Ref SSLArn
           MinimumProtocolVersion: TLSv1_2016

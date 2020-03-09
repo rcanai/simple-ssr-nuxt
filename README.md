@@ -86,7 +86,7 @@ $ aws cloudformation deploy \
   --parameter-overrides \
   Env=staging \
   SSLArn=XXX \
-  LambdaArn=XXX \
+  BasicAuthLambdaArn=XXX \
   --profile XXX;
 ```
 
@@ -115,7 +115,7 @@ $ aws cloudformation deploy \
   --stack-name staging-sls-nuxt-front \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameter-overrides \
-  LambdaArn="" \
+  BasicAuthLambdaArn="" \
   --profile XXX;
 ```
 
@@ -141,7 +141,8 @@ $ aws cloudformation deploy \
   GitHubUser=XXX \
   GitHubToken=XXX \
   SSLArn=XXX \
-  LambdaArn=XXX \
+  BasicAuthLambdaArn=XXX \
+  RedirectLambdaArn=XXX \
   --profile XXX;
 ```
 
