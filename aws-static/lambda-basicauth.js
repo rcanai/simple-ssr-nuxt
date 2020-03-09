@@ -13,10 +13,16 @@ exports.handler = async (event) => {
   const request = event.Records[0].cf.request
   const headers = request.headers
   const clientIp = request.clientIp
+  const uri = request.uri // e.g. '/users/1/profile'
 
   const authUser = 'user'
   const authPass = 'password'
   const authString = 'Basic ' + Buffer.from(authUser + ':' + authPass).toString('base64')
+
+  // マニフェストはBasic認証なし
+  if (uri.includes('manifest')) {
+    return request
+  }
 
   if (
     typeof headers.authorization === 'undefined' ||

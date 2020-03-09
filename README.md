@@ -157,7 +157,7 @@ $ aws cloudformation deploy \
   --profile XXX;
 ```
 
-## [sls] Delete
+## [static] Delete
 
 ```bash
 $ aws cloudformation delete-stack --stack-name staging-static-nuxt --profile XXX;

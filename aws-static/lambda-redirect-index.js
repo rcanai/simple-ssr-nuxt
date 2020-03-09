@@ -7,7 +7,7 @@
 /* eslint-disable require-await */
 exports.handler = async (event) => {
   const request = event.Records[0].cf.request
-  const uri = request.uri // '/users/1/profile'
+  const uri = request.uri // e.g. '/users/1/profile'
 
   if (!uri.includes('.')) {
     // 余計なスラッシュを消してhtml拡張子をつける
