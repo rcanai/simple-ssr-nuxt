@@ -6,6 +6,7 @@ Parameters:
     Default: "staging"
   GitHubUser:
     Type: String
+    Default: "rcanai"
   GitHubToken:
     Type: String
   GitHubBranch:

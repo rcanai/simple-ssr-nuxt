@@ -6,6 +6,7 @@ Parameters:
     Default: "staging"
   GitHubUser:
     Type: String
+    Default: "rcanai"
   GitHubToken:
     Type: String
   GitHubBranch:
@@ -23,7 +24,7 @@ Parameters:
     Default: "rcanai.jp"
   FullDomain:
     Type: String
-    Default: "static-nuxt.rcanai.jp"
+    Default: "staticnuxt.rcanai.jp"
 
 Conditions:
   # Basic認証の有無
@@ -92,6 +93,10 @@ Resources:
           ForwardedValues:
             QueryString: true
           ViewerProtocolPolicy: redirect-to-https
+          Compress: true
+          DefaultTTL: 86400
+          MinTTL: 86400
+          MaxTTL: 31536000
           LambdaFunctionAssociations:
             !If
               - HasBasicAuthLambda

@@ -73,7 +73,6 @@ $ aws cloudformation deploy \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameter-overrides \
   Env=staging \
-  GitHubUser=XXX \
   GitHubToken=XXX \
   ApiKey=XXX \
   --profile XXX;
@@ -138,7 +137,6 @@ $ aws cloudformation deploy \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameter-overrides \
   Env=staging \
-  GitHubUser=XXX \
   GitHubToken=XXX \
   SSLArn=XXX \
   BasicAuthLambdaArn=XXX \
