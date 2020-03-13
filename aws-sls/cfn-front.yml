@@ -79,7 +79,7 @@ Resources:
             QueryString: false
             Cookies:
               Forward: all
-          Compress: true
+          Compress: false
           DefaultTTL: 0
           MinTTL: 0
           MaxTTL: 0
