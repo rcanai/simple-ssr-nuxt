@@ -207,6 +207,8 @@ Resources:
             Value: !Ref FrontEndCFDist
           - Name: FRONTEND_BUCKET
             Value: !Ref FrontEndBucket
+          - Name: BASE_URL
+            Value: !Sub "https://${FullDomain}"
           - Name: IS_GENERATE
             Value: true
       Name: !Sub "${AWS::StackName}-codebuild"
