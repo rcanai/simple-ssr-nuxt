@@ -97,6 +97,18 @@ Resources:
               QueryString: false
             Compress: true
           - TargetOriginId: StaticS3Bucket
+            PathPattern: "/sitemap.xml"
+            ViewerProtocolPolicy: redirect-to-https
+            ForwardedValues:
+              QueryString: false
+            Compress: true
+          - TargetOriginId: StaticS3Bucket
+            PathPattern: "/sitemap.xml.gz"
+            ViewerProtocolPolicy: redirect-to-https
+            ForwardedValues:
+              QueryString: false
+            Compress: true
+          - TargetOriginId: StaticS3Bucket
             PathPattern: "/*.png"
             ViewerProtocolPolicy: redirect-to-https
             ForwardedValues:

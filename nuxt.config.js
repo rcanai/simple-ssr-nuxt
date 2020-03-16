@@ -1,5 +1,6 @@
 /* eslint-disable nuxt/no-cjs-in-config */
 /* eslint-disable require-await */
+const BASE_URL = process.env.BASE_URL || 'http://localhost:3000'
 
 let generate
 if (process.env.IS_GENERATE) {
@@ -73,20 +74,36 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     ['@nuxtjs/axios'],
     // Doc: https://pwa.nuxtjs.org/
-    ['@nuxtjs/pwa', {
-      manifest: {
-        icons: [
-          {
-            src: '/icon.png',
-            sizes: '72x72 96x96 128x128 192x192 256x256 512x512'
-          }
-        ]
-      },
-      icon: false // 無駄にコンパイルされるので無効化する
-    }],
+    ['@nuxtjs/pwa'],
+    // Doc: https://github.com/nuxt-community/sitemap-module
+    ['@nuxtjs/sitemap'],
     // Doc: https://github.com/nuxt-community/style-resources-module
     ['@nuxtjs/style-resources']
   ],
+  /*
+  ** @nuxtjs/pwa
+  */
+  pwa: {
+    manifest: {
+      icons: [
+        {
+          src: '/icon.png',
+          sizes: '72x72 96x96 128x128 192x192 256x256 512x512'
+        }
+      ]
+    },
+    icon: false // 無駄にコンパイルされるので無効化する
+  },
+  /*
+** @nuxtjs/sitemap
+*/
+  sitemap: {
+    hostname: BASE_URL,
+    gzip: true,
+    exclude: [
+      '/admin/**'
+    ]
+  },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
@@ -107,9 +124,6 @@ module.exports = {
     ** You can extend webpack config here
     */
     extend (config, ctx) {
-    },
-    // ビルドキャッシュ（動かないかも？公式見て！）
-    hardSource: process.env.NODE_ENV === 'development',
-    cache: process.env.NODE_ENV === 'development'
+    }
   }
 }
