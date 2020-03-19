@@ -1,4 +1,4 @@
-service: ${self:custom.PARAMS.NODE_ENV}-slsnuxt
+service: slsnuxt
 
 provider:
   name: aws
@@ -142,12 +142,12 @@ resources:
       Export:
         Name: ${self:custom.PARAMS.NODE_ENV}-slsnuxt-apiKey
     CFOriginAccessIdentity:
-      Value: 
+      Value:
         Ref: CFOriginAccessIdentity
       Export:
         Name: ${self:custom.PARAMS.NODE_ENV}-slsnuxt-cfOAI
     StaticS3BucketDomainName:
-      Value: 
+      Value:
         Fn::GetAtt: [StaticS3Bucket, DomainName]
       Export:
         Name: ${self:custom.PARAMS.NODE_ENV}-slsnuxt-s3dn
