@@ -14,7 +14,7 @@ phases:
     commands:
       - yarn run generate
       - rm ./dist/_nuxt/LICENSES
-      - aws s3 sync ./dist s3://${FRONTEND_BUCKET}/
+      - aws s3 sync　./dist s3://${FRONTEND_BUCKET}/ --delete
   post_build:
     commands:
       - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths '/*'
