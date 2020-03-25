@@ -22,6 +22,9 @@ Resources:
   DeployS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
+      Tags:
+        - Key: Domain
+          Value: !Ref Domain
       BucketName: !Sub "${AWS::StackName}-deploy"
 
   # ------
@@ -99,6 +102,9 @@ Resources:
   DeployCodeBuildProject:
     Type: AWS::CodeBuild::Project
     Properties:
+      Tags:
+        - Key: Domain
+          Value: !Ref Domain
       Artifacts:
         Type: CODEPIPELINE
       Source:

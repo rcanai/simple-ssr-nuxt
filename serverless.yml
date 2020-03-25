@@ -97,6 +97,9 @@ resources:
     StaticS3Bucket:
       Type: AWS::S3::Bucket
       Properties:
+        Tags:
+          - Key: Domain
+            Value: !Ref Domain
         BucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
         AccessControl: Private
 

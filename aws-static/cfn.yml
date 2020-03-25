@@ -46,6 +46,9 @@ Resources:
   FrontEndBucket:
     Type: AWS::S3::Bucket
     Properties:
+      Tags:
+        - Key: Domain
+          Value: !Ref Domain
       BucketName: !Ref FullDomain
 
   FrontEndBucketPolicy:
@@ -74,6 +77,9 @@ Resources:
   FrontEndCFDist:
     Type: AWS::CloudFront::Distribution
     Properties:
+      Tags:
+        - Key: Domain
+          Value: !Ref Domain
       DistributionConfig:
         Comment: !Ref AWS::StackName
         IPV6Enabled: true
@@ -191,6 +197,9 @@ Resources:
   DeployCodeBuildProject:
     Type: AWS::CodeBuild::Project
     Properties:
+      Tags:
+        - Key: Domain
+          Value: !Ref Domain
       Artifacts:
         Type: CODEPIPELINE
       Source:

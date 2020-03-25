@@ -27,6 +27,9 @@ Resources:
   FrontEndCFDist:
     Type: AWS::CloudFront::Distribution
     Properties:
+      Tags:
+        - Key: Domain
+          Value: !Ref Domain
       DistributionConfig:
         # Alias(CNAMEs)の設定はSSL証明書の設定が必要
         Aliases:
@@ -49,7 +52,7 @@ Resources:
               OriginProtocolPolicy: match-viewer
             OriginCustomHeaders:
               - HeaderName: "X-API-KEY"
-                HeaderValue: 
+                HeaderValue:
                   Fn::ImportValue: !Sub ${Env}-slsnuxt-apiKey
           - Id: StaticS3Bucket
             DomainName:
