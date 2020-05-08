@@ -65,7 +65,11 @@ module.exports = {
   */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    process.env.NODE_ENV === 'development' ? '@nuxtjs/eslint-module' : ''
+    process.env.NODE_ENV === 'development' ? ['@nuxtjs/eslint-module'] : '',
+    // Doc: https://pwa.nuxtjs.org/
+    ['@nuxtjs/pwa'],
+    // Doc: https://github.com/nuxt-community/style-resources-module
+    ['@nuxtjs/style-resources']
   ].filter(Boolean),
   /*
   ** Nuxt.js modules
@@ -73,12 +77,8 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     ['@nuxtjs/axios'],
-    // Doc: https://pwa.nuxtjs.org/
-    ['@nuxtjs/pwa'],
     // Doc: https://github.com/nuxt-community/sitemap-module
-    ['@nuxtjs/sitemap'],
-    // Doc: https://github.com/nuxt-community/style-resources-module
-    ['@nuxtjs/style-resources']
+    ['@nuxtjs/sitemap']
   ],
   /*
   ** @nuxtjs/pwa
