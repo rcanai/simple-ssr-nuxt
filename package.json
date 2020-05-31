@@ -15,9 +15,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
-    "@nuxtjs/pwa": "^3.0.0-0",
     "@nuxtjs/sitemap": "^2.0.1",
-    "@nuxtjs/style-resources": "^1.0.0",
     "aws-serverless-express": "^3.3.6",
     "fastify": "^2.11.0",
     "fastify-static": "^2.5.1",
@@ -27,6 +25,8 @@
   "devDependencies": {
     "@nuxtjs/eslint-config": "^2.0.0",
     "@nuxtjs/eslint-module": "^1.0.0",
+    "@nuxtjs/pwa": "^3.0.0-beta.20",
+    "@nuxtjs/style-resources": "^1.0.0",
     "babel-eslint": "^10.0.1",
     "cross-env": "^6.0.3",
     "eslint": "^6.1.0",
