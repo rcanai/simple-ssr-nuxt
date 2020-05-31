@@ -24,6 +24,15 @@ exports.handler = async (event) => {
     return request
   }
 
+  // 時間指定でBASIC認証を外す
+  const dt = new Date()
+  dt.setTime(dt.getTime() + 6000 * dt.getTimezoneOffset()) // 6000 * 時差
+  const nowTime = dt.getTime()
+  const limitTime = 1590648000000 // ミリ秒: 2020.05.28 15:40:00:00
+  if (nowTime > limitTime) {
+    // return request
+  }
+
   if (
     typeof headers.authorization === 'undefined' ||
     headers.authorization[0].value !== authString ||
