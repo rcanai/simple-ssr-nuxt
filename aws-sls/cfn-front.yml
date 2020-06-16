@@ -64,10 +64,10 @@ Resources:
                   - ""
                   - - "origin-access-identity/cloudfront/"
                     - Fn::ImportValue: !Sub ${Env}-slsnuxt-cfOAI
-          - Id: StaticS3BucketImages
+          - Id: StaticS3BucketAssets
             DomainName:
               Fn::ImportValue: !Sub ${Env}-slsnuxt-s3dn
-            OriginPath: "/_nuxt/images"
+            OriginPath: ""
             S3OriginConfig:
               OriginAccessIdentity:
                 Fn::Join:
@@ -97,7 +97,7 @@ Resources:
           MinTTL: 0
           MaxTTL: 0
         CacheBehaviors:
-          - TargetOriginId: StaticS3BucketImages
+          - TargetOriginId: StaticS3BucketAssets
               PathPattern: "/_nuxt/images/*"
               ViewerProtocolPolicy: redirect-to-https
               ForwardedValues:
