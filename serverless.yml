@@ -81,7 +81,7 @@ custom:
   s3Sync:
     - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
       acl: public-read
-      bucketPrefix: ""
+      bucketPrefix: "static"
       localDir: "client/static"
     # - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
     #   acl: public-read

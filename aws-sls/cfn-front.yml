@@ -57,7 +57,17 @@ Resources:
           - Id: StaticS3Bucket
             DomainName:
               Fn::ImportValue: !Sub ${Env}-slsnuxt-s3dn
-            OriginPath: ""
+            OriginPath: "/static"
+            S3OriginConfig:
+              OriginAccessIdentity:
+                Fn::Join:
+                  - ""
+                  - - "origin-access-identity/cloudfront/"
+                    - Fn::ImportValue: !Sub ${Env}-slsnuxt-cfOAI
+          - Id: StaticS3BucketImages
+            DomainName:
+              Fn::ImportValue: !Sub ${Env}-slsnuxt-s3dn
+            OriginPath: "/_nuxt/images"
             S3OriginConfig:
               OriginAccessIdentity:
                 Fn::Join:
@@ -87,6 +97,12 @@ Resources:
           MinTTL: 0
           MaxTTL: 0
         CacheBehaviors:
+          - TargetOriginId: StaticS3BucketImages
+              PathPattern: "/_nuxt/images/*"
+              ViewerProtocolPolicy: redirect-to-https
+              ForwardedValues:
+                QueryString: false
+              Compress: true
           - TargetOriginId: StaticS3Bucket
             PathPattern: "/favicon.ico"
             ViewerProtocolPolicy: redirect-to-https
@@ -113,12 +129,6 @@ Resources:
             Compress: true
           - TargetOriginId: StaticS3Bucket
             PathPattern: "/*.png"
-            ViewerProtocolPolicy: redirect-to-https
-            ForwardedValues:
-              QueryString: false
-            Compress: true
-          - TargetOriginId: StaticS3Bucket
-            PathPattern: "/_nuxt/images/*"
             ViewerProtocolPolicy: redirect-to-https
             ForwardedValues:
               QueryString: false

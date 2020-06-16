@@ -21,11 +21,6 @@ module.exports = {
   mode: 'universal',
   srcDir: 'client/',
   generate,
-  router: {
-    // ここを/STAGE_NAME/に変更すればAPIGWのURLのままアクセスできる。
-    // 基本的にはCloudFrontで参照するため、変更の必要はない。
-    base: '/'
-  },
   /*
   ** Headers of the page
   */
