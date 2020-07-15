@@ -68,7 +68,7 @@ $ yarn create nuxt-app simple-ssr-nuxt;
 ```bash
 # 1. First (Create Stack) - Codepipeline ~ Serverless
 $ aws cloudformation deploy \
-  --template-file aws-sls/cfn-deploy.yml \
+  --template-file aws/cfn-deploy.yml \
   --stack-name staging-sls-nuxt-deploy \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameter-overrides \
@@ -79,7 +79,7 @@ $ aws cloudformation deploy \
 
 # 2. First (Create Stack) - Cloudfront ~ Rout53
 $ aws cloudformation deploy \
-  --template-file aws-sls/cfn-front.yml \
+  --template-file aws/cfn-front.yml \
   --stack-name staging-sls-nuxt-front \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameter-overrides \
@@ -95,14 +95,14 @@ $ aws cloudformation deploy \
 # 1. Second and more (Update Stack) - Codepipeline ~ Serverless
 $ aws cloudformation deploy \
   --capabilities CAPABILITY_NAMED_IAM \
-  --template-file aws-sls/cfn-deploy.yml \
+  --template-file aws/cfn-deploy.yml \
   --stack-name staging-sls-nuxt-deploy \
   --profile XXX;
 
 # 2. Second and more (Update Stack) - Cloudfront ~ Rout53
 $ aws cloudformation deploy \
   --capabilities CAPABILITY_NAMED_IAM \
-  --template-file aws-sls/cfn-front.yml \
+  --template-file aws/cfn-front.yml \
   --stack-name staging-sls-nuxt-front \
   --profile XXX;
 ```
@@ -110,7 +110,7 @@ $ aws cloudformation deploy \
 ```bash
 # Remove Basic Auth
 $ aws cloudformation deploy \
-  --template-file aws-sls/cfn-front.yml \
+  --template-file aws/cfn-front.yml \
   --stack-name staging-sls-nuxt-front \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameter-overrides \

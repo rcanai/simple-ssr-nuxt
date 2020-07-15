@@ -65,7 +65,7 @@ plugins:
   - serverless-s3-sync
 
 custom:
-  PARAMS: ${file(aws-sls/sls-params.js)}
+  PARAMS: ${file(aws/sls-params.js)}
   lambdaFunctionAssociations:
     true:
       - EventType: viewer-request
