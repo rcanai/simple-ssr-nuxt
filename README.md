@@ -115,7 +115,7 @@ $ aws cloudformation deploy \
   --template-file aws/cfn-front.yml \
   --stack-name staging-sls-nuxt-front \
   --capabilities CAPABILITY_NAMED_IAM \
-  --parameter-overrides \
+  --parameter-overrides \ aws cloudformation delete-stack --stack-name slsnuxt-staging --profile XXX;
   BasicAuthLambdaArn="" \
   --profile XXX;
 ```
@@ -123,43 +123,9 @@ $ aws cloudformation deploy \
 ## [sls] Delete
 
 ```bash
-$ aws cloudformation delete-stack --stack-name staging-sls-nuxt --profile XXX;
-$ aws s3 rm s3://staging-sls-nuxt --recursive --profile XXX;
-```
-
-___
-
-## [static] Deploy
-
-```bash
-# First (Create Stack)
-$ aws cloudformation deploy \
-  --template-file aws-static/cfn.yml \
-  --stack-name staging-static-nuxt \
-  --capabilities CAPABILITY_NAMED_IAM \
-  --parameter-overrides \
-  Env=staging \
-  GitHubToken=XXX \
-  SSLArn=XXX \
-  BasicAuthLambdaArn=XXX \
-  RedirectLambdaArn=XXX \
-  --profile XXX;
-```
-
-**The first deployment takes about 40 minutes :(**
-
-```bash
-# Second etc (Update Stack)
-$ aws cloudformation deploy \
-  --capabilities CAPABILITY_NAMED_IAM \
-  --template-file aws-static/cfn.yml \
-  --stack-name staging-static-nuxt \
-  --profile XXX;
-```
-
-## [static] Delete
-
-```bash
-$ aws cloudformation delete-stack --stack-name staging-static-nuxt --profile XXX;
-$ aws s3 rm s3://staging-static-nuxt --recursive --profile XXX;
+$ aws s3 rm s3://staging-sls-nuxt-deploy-deploy --recursive --profile XXX;
+$ aws cloudformation delete-stack --stack-name staging-sls-nuxt-deploy --profile XXX;
+$ aws cloudformation delete-stack --stack-name staging-sls-nuxt-front --profile XXX;
+$ aws s3 rm s3://staging-simple-sls-nuxt-static-bucket --recursive --profile XXX;
+$ aws cloudformation delete-stack --stack-name slsnuxt-staging --profile XXX; # serverlessの物が残ってしまう
 ```

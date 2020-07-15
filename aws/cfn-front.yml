@@ -141,14 +141,15 @@ Resources:
 
   # ------
   # Route53 RecordSet
+  # Note: Route53はCFnで管理しなくても動く（管理しない場合はコメントアウト）
   # ------
-  # Route53RecordSet:
-  #   Type: AWS::Route53::RecordSet
-  #   Properties:
-  #     HostedZoneName: !Sub "${Domain}."
-  #     Name: !Sub "${FullDomain}."
-  #     Type: A
-  #     AliasTarget:
-  #       HostedZoneId: Z2FDTNDATAQYW2 # CloudFrontなのでIDは固定
-  #       DNSName:
-  #         Fn::GetAtt: [FrontEndCFDist, DomainName]
+  Route53RecordSet:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: !Sub "${Domain}."
+      Name: !Sub "${FullDomain}."
+      Type: A
+      AliasTarget:
+        HostedZoneId: Z2FDTNDATAQYW2 # CloudFrontなのでIDは固定
+        DNSName:
+          Fn::GetAtt: [FrontEndCFDist, DomainName]
