@@ -7,6 +7,7 @@ module.exports = {
   srcDir: 'client/',
   target: 'server',
   components: false,
+  telemetry: false,
   /*
   ** Headers of the page
   */
