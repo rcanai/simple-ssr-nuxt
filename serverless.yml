@@ -99,7 +99,7 @@ resources:
       Properties:
         Tags:
           - Key: Domain
-            Value: !Ref Domain
+            Value: ${self:custom.PARAMS.DOMAIN}
         BucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
         AccessControl: Private
 

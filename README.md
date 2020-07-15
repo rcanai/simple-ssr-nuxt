@@ -75,6 +75,7 @@ $ aws cloudformation deploy \
   Env=staging \
   GitHubToken=XXX \
   ApiKey=XXX \
+  Domain=XXX \
   --profile XXX;
 
 # 2. First (Create Stack) - Cloudfront ~ Rout53
@@ -86,6 +87,7 @@ $ aws cloudformation deploy \
   Env=staging \
   SSLArn=XXX \
   BasicAuthLambdaArn=XXX \
+  Domain=XXX \
   --profile XXX;
 ```
 

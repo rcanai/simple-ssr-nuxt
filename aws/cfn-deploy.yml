@@ -14,6 +14,9 @@ Parameters:
     Default: "master"
   ApiKey:
     Type: String
+  Domain:
+    Type: String
+    Default: "example.com"
 
 Resources:
   # ------
