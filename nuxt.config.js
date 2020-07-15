@@ -5,6 +5,8 @@ const BASE_URL = process.env.BASE_URL || 'http://localhost:3000'
 module.exports = {
   mode: 'universal',
   srcDir: 'client/',
+  target: 'server',
+  components: false,
   /*
   ** Headers of the page
   */
