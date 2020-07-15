@@ -14,7 +14,7 @@ Parameters:
     Default: "rcanai.jp"
   FullDomain:
     Type: String
-    Default: "sslnuxt.rcanai.jp"
+    Default: "ssrnuxt.rcanai.jp"
 
 Conditions:
   # Basic認証の有無
