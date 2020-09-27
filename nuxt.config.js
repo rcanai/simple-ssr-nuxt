@@ -8,6 +8,7 @@ module.exports = {
   target: 'server',
   components: false,
   telemetry: false,
+  dev: false,
   /*
   ** Headers of the page
   */

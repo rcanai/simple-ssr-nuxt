@@ -63,6 +63,7 @@ plugins:
   - serverless-apigw-binary
   - serverless-prune-plugin
   - serverless-s3-sync
+  - serverless-offline
 
 custom:
   PARAMS: ${file(aws/sls-params.js)}
@@ -78,6 +79,8 @@ custom:
   prune:
     automatic: true
     number: 3
+  serverless-offline:
+    port: 4000
   s3Sync:
     - bucketName: ${self:custom.PARAMS.S3_BUCKET_NAME}
       acl: public-read
