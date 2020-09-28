@@ -26,7 +26,7 @@ functions:
           private: true
           cors: true
       - http:
-          path: '/{proxy+}'
+          path: '{proxy+}'
           method: ANY
           private: true
           cors: true
