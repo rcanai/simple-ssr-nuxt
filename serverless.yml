@@ -48,7 +48,7 @@ functions:
                   }
                 }'
       - http:
-          path: '/{proxy+}'
+          path: '{proxy+}'
           method: GET
           private: true
           cors: true
