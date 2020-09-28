@@ -1,18 +1,28 @@
 <template>
   <div>
     {{ a }}
+    <div>
+      <hr>
+      {{ req }}
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  fetch () {
+  fetch (context) {
+    let req = {}
+    if (process.server) {
+      req = context.req
+    }
     const { a = 'a' } = this.$route.query
     this.a = a
+    this.req = req
   },
   data () {
     return {
-      a: ''
+      a: '',
+      req: {}
     }
   }
 }
