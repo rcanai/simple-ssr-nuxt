@@ -15,7 +15,7 @@ export default {
     if (process.server) {
       req = context.req
     }
-    const { a = 'a' } = this.$route.query
+    const { a = 'a' } = context.query
     this.a = a
     this.req = req
   },
