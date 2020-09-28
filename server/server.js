@@ -35,8 +35,9 @@ exports.createApp = async function start () {
 
   await nuxt.ready()
   fastify.use(
-    (_req, res, next) => {
-      nuxt.render(_req, res, next)
+    (request, reply, next) => {
+      console.log(request.url)
+      nuxt.render(request, reply, next)
     }
   )
 
