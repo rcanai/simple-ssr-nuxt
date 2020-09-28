@@ -6,6 +6,7 @@ const appPromise = createApp()
 
 exports.handler = async (event, context) => {
   const app = await appPromise
+  console.log(event)
 
   return awsServerlessExpress.proxy(app.server, event, context, 'PROMISE').promise
 }
