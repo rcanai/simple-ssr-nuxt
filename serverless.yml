@@ -24,12 +24,12 @@ functions:
           path: '/'
           method: ANY
           private: true
-          cors: true
+          # cors: true
       - http:
           path: '{proxy+}'
           method: ANY
           private: true
-          cors: true
+          # cors: true
 
 package:
   excludeDevDependencies: true
