@@ -3,26 +3,26 @@
     {{ a }}
     <div>
       <hr>
-      {{ req }}
+      {{ url }}
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  fetch (context) {
-    let req = {}
+  fetch () {
+    let url = ''
     if (process.server) {
-      req = context.req
+      url = this.$nuxt.context.req.url
     }
     const { a = 'a' } = this.$route.query
     this.a = a
-    this.req = req
+    this.url = url
   },
   data () {
     return {
       a: '',
-      req: {}
+      url: ''
     }
   }
 }
