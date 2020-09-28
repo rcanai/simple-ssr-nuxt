@@ -33,6 +33,10 @@ functions:
           path: '{proxy+}'
           method: ANY
           private: true
+          request:
+            parameters:
+              querystrings:
+                a: true
           # cors: true
 
 package:
