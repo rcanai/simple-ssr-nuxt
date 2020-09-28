@@ -24,6 +24,10 @@ functions:
           path: '/'
           method: ANY
           private: true
+          # request:
+          #   parameters:
+          #     querystrings:
+          #       a: true
           # cors: true
       - http:
           path: '{proxy+}'
