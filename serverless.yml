@@ -22,12 +22,12 @@ functions:
     events:
       - http:
           path: '/'
-          method: GET
+          method: ANY
           private: true
           cors: true
       - http:
           path: '/{proxy+}'
-          method: GET
+          method: ANY
           private: true
           cors: true
 
