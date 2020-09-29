@@ -25,25 +25,19 @@ functions:
           method: ANY
           private: true
           cors: true
-          request:
-            template:
-              application/json: >
-                {
-                  "foo" : "$input.params('foo')",
-                  "a": "$input.params('a')"
-                }
+          integration: http-proxy
+          parameters:
+              paths:
+                proxy: true
       - http:
           path: '{proxy+}'
           method: ANY
           private: true
           cors: true
-          request:
-            template:
-              application/json: >
-                {
-                  "foo" : "$input.params('foo')",
-                  "a": "$input.params('a')"
-                }
+          integration: http-proxy
+          parameters:
+              paths:
+                proxy: true
 
 package:
   excludeDevDependencies: true
