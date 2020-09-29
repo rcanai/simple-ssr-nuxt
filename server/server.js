@@ -1,10 +1,11 @@
 const path = require('path')
 const awsServerlessExpress = require('aws-serverless-express')
 const { Nuxt } = require('nuxt-start')
+const Fastify = require('fastify')
 
 const binaryTypes = ['*/*']
 
-const fastify = require('fastify')({
+const fastify = Fastify({
   serverFactory (handler) {
     return awsServerlessExpress.createServer(handler, null, binaryTypes)
   }
@@ -36,7 +37,6 @@ exports.createApp = async function start () {
   await nuxt.ready()
   fastify.use(
     (request, reply, next) => {
-      console.log(request.url)
       nuxt.render(request, reply, next)
     }
   )

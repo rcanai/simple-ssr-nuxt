@@ -22,22 +22,12 @@ functions:
     events:
       - http:
           path: '/'
-          method: ANY
+          method: any
           private: true
-          cors: true
-          integration: http-proxy
-          parameters:
-              paths:
-                proxy: true
       - http:
-          path: '{proxy+}'
-          method: ANY
+          path: '/{proxy+}'
+          method: any
           private: true
-          cors: true
-          integration: http-proxy
-          parameters:
-              paths:
-                proxy: true
 
 package:
   excludeDevDependencies: true
