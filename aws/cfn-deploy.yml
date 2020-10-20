@@ -4,6 +4,10 @@ Parameters:
   Env:
     Type: String
     Default: "staging"
+  ConfigEnv:
+    Type: String
+    Default: "staging"
+    Description: "/configs/config.{ConfigEnv}.js"
   GitHubUser:
     Type: String
     Default: "rcanai"
@@ -121,6 +125,8 @@ Resources:
         EnvironmentVariables:
           - Name: NODE_ENV
             Value: !Ref Env
+          - Name: CONFIG_ENV
+            Value: !Ref ConfigEnv
           - Name: API_KEY
             Value: !Ref ApiKey
       Name: !Sub "${AWS::StackName}-codebuild"
