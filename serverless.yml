@@ -1,6 +1,6 @@
 service: slsnuxt
 
-frameworkVersion: ">=13.39.0"
+# frameworkVersion: ">=13.39.0"
 
 provider:
   name: aws
