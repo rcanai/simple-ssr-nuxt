@@ -27,11 +27,19 @@ functions:
           method: GET
           private: true
           cors: true
+          request:
+            parameters:
+              querystrings:
+                a: true
       - http:
           path: '/{proxy+}'
           method: GET
           private: true
           cors: true
+          request:
+            parameters:
+              querystrings:
+                a: true
 
 package:
   excludeDevDependencies: true
