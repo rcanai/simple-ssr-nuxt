@@ -24,11 +24,11 @@ functions:
     events:
       - http:
           path: '/'
-          method: GET
+          method: any
           private: true
       - http:
           path: '{proxy+}'
-          method: GET
+          method: any
           private: true
 
 package:
