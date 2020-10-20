@@ -24,22 +24,12 @@ functions:
     events:
       - http:
           path: '/'
-          method: GET
+          method: any
           private: true
-          cors: true
-          request:
-            parameters:
-              querystrings:
-                a: true
       - http:
           path: '/{proxy+}'
-          method: GET
+          method: any
           private: true
-          cors: true
-          request:
-            parameters:
-              querystrings:
-                a: true
 
 package:
   excludeDevDependencies: true
