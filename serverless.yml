@@ -27,7 +27,7 @@ functions:
           method: any
           private: true
       - http:
-          path: '{proxy+}'
+          path: '/{proxy+}'
           method: any
           private: true
 
