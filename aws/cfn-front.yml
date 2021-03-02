@@ -89,7 +89,7 @@ Resources:
                   LambdaFunctionARN: !Ref BasicAuthLambdaArn
               - []
           ForwardedValues:
-            QueryString: false
+            QueryString: true
             Cookies:
               Forward: all
           Compress: false
