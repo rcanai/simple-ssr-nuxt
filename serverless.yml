@@ -67,12 +67,6 @@ plugins:
 
 custom:
   PARAMS: ${file(aws/sls-params.js)}
-  lambdaFunctionAssociations:
-    true:
-      - EventType: viewer-request
-        LambdaFunctionARN: ${self:custom.PARAMS.LAMBDA_ARN}
-    false:
-      - []
   apigwBinary:
     types:
       - '*/*'
